@@ -1,0 +1,266 @@
+{
+  "name": "gogo-codelens",
+  "displayName": "GoGo CodeLens",
+  "version": "1.0.0",
+  "description": "A VS Code extension that adds CodeLens annotations to your Go code. showing reference counts, interface implementations, and method relationships inline.",
+  "categories": [
+    "Programming Languages",
+    "Visualization"
+  ],
+  "keywords": [
+    "Go",
+    "golang",
+    "CodeLens",
+    "implementation",
+    "interface"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xiaoxuxxxx/gogo-codelens"
+  },
+  "license": "MIT",
+  "publisher": "XiaoXuxxxx",
+  "main": "./dist/extension.js",
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "test": "vscode-test",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src"
+  },
+  "contributes": {
+    "configuration": {
+      "title": "Go CodeLens",
+      "properties": {
+        "gogoCodeLens.codelens.enabled.showReferences": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable CodeLens annotations for all supported symbols to show how many times they are referenced."
+        },
+        "gogoCodeLens.codelens.enabled.showImplementations": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable CodeLens annotations for all supported symbols to show their implementations."
+        },
+        "gogoCodeLens.codelens.function.references.isEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable CodeLens annotations above functions to show how many times they are referenced."
+        },
+        "gogoCodeLens.codelens.function.references.singularTemplate": {
+          "type": "string",
+          "default": "{{ count }} reference",
+          "description": "Template text displayed above a function with exactly one reference."
+        },
+        "gogoCodeLens.codelens.function.references.pluralTemplate": {
+          "type": "string",
+          "default": "{{ count }} references",
+          "description": "Template text displayed above a function with multiple references."
+        },
+        "gogoCodeLens.codelens.function.references.emptyText": {
+          "type": "string",
+          "default": "",
+          "description": "Text displayed above a function when no references are found. Leave empty to disable the annotation."
+        },
+        "gogoCodeLens.codelens.interface.references.isEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable CodeLens annotations above interfaces to show how many times they are referenced."
+        },
+        "gogoCodeLens.codelens.interface.references.singularTemplate": {
+          "type": "string",
+          "default": "{{ count }} reference",
+          "description": "Template text displayed above an interface with exactly one reference."
+        },
+        "gogoCodeLens.codelens.interface.references.pluralTemplate": {
+          "type": "string",
+          "default": "{{ count }} references",
+          "description": "Template text displayed above an interface with multiple references."
+        },
+        "gogoCodeLens.codelens.interface.references.emptyText": {
+          "type": "string",
+          "default": "",
+          "description": "Text displayed above an interface when no references are found. Leave empty to disable the annotation."
+        },
+        "gogoCodeLens.codelens.interface.implementBy.isEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable CodeLens annotations above interfaces to show how many types implement them."
+        },
+        "gogoCodeLens.codelens.interface.implementBy.singularTemplate": {
+          "type": "string",
+          "default": "↓↓ implemented below",
+          "description": "Template text displayed above an interface with exactly one implementation."
+        },
+        "gogoCodeLens.codelens.interface.implementBy.pluralTemplate": {
+          "type": "string",
+          "default": "↓↓ implemented by {{ count }}",
+          "description": "Template text displayed above an interface with multiple implementations."
+        },
+        "gogoCodeLens.codelens.interface.implementBy.emptyText": {
+          "type": "string",
+          "default": "",
+          "description": "Text displayed above an interface when no implementations are found. Leave empty to disable the annotation."
+        },
+        "gogoCodeLens.codelens.childMethodInterface.references.isEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable CodeLens annotations above interface methods to show how many times they are referenced."
+        },
+        "gogoCodeLens.codelens.childMethodInterface.references.singularTemplate": {
+          "type": "string",
+          "default": "{{ count }} reference",
+          "description": "Template text displayed above an interface method with exactly one reference."
+        },
+        "gogoCodeLens.codelens.childMethodInterface.references.pluralTemplate": {
+          "type": "string",
+          "default": "{{ count }} references",
+          "description": "Template text displayed above an interface method with multiple references."
+        },
+        "gogoCodeLens.codelens.childMethodInterface.references.emptyText": {
+          "type": "string",
+          "default": "",
+          "description": "Text displayed above an interface method when no references are found. Leave empty to disable the annotation."
+        },
+        "gogoCodeLens.codelens.childMethodInterface.implementBy.isEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable CodeLens annotations above interface methods to show how many types implement them."
+        },
+        "gogoCodeLens.codelens.childMethodInterface.implementBy.singularTemplate": {
+          "type": "string",
+          "default": "↓↓ implemented below",
+          "description": "Template text displayed above an interface method with exactly one implementation."
+        },
+        "gogoCodeLens.codelens.childMethodInterface.implementBy.pluralTemplate": {
+          "type": "string",
+          "default": "↓↓ implemented by {{ count }}",
+          "description": "Template text displayed above an interface method with multiple implementations."
+        },
+        "gogoCodeLens.codelens.childMethodInterface.implementBy.emptyText": {
+          "type": "string",
+          "default": "",
+          "description": "Text displayed above an interface method when no implementations are found. Leave empty to disable the annotation."
+        },
+        "gogoCodeLens.codelens.method.references.isEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable CodeLens annotations above methods to show how many times they are referenced."
+        },
+        "gogoCodeLens.codelens.method.references.singularTemplate": {
+          "type": "string",
+          "default": "{{ count }} reference",
+          "description": "Template text displayed above a method with exactly one reference."
+        },
+        "gogoCodeLens.codelens.method.references.pluralTemplate": {
+          "type": "string",
+          "default": "{{ count }} references",
+          "description": "Template text displayed above a method with multiple references."
+        },
+        "gogoCodeLens.codelens.method.references.emptyText": {
+          "type": "string",
+          "default": "",
+          "description": "Text displayed above a method when no references are found. Leave empty to disable the annotation."
+        },
+        "gogoCodeLens.codelens.method.implementFrom.isEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable CodeLens annotations above methods to show how many interface methods they implement."
+        },
+        "gogoCodeLens.codelens.method.implementFrom.singularTemplate": {
+          "type": "string",
+          "default": "↑↑ from interface",
+          "description": "Template text displayed above a method that implements exactly one interface method."
+        },
+        "gogoCodeLens.codelens.method.implementFrom.pluralTemplate": {
+          "type": "string",
+          "default": "↑↑ from interface ({{ count }})",
+          "description": "Template text displayed above a method that implements multiple interface methods."
+        },
+        "gogoCodeLens.codelens.method.implementFrom.emptyText": {
+          "type": "string",
+          "default": "",
+          "description": "Text displayed above a method that does not implement any interface methods. Leave empty to disable the annotation."
+        },
+        "gogoCodeLens.codelens.struct.references.isEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable CodeLens annotations above structs to show how many times they are referenced."
+        },
+        "gogoCodeLens.codelens.struct.references.singularTemplate": {
+          "type": "string",
+          "default": "{{ count }} reference",
+          "description": "Template text displayed above a struct with exactly one reference."
+        },
+        "gogoCodeLens.codelens.struct.references.pluralTemplate": {
+          "type": "string",
+          "default": "{{ count }} references",
+          "description": "Template text displayed above a struct with multiple references."
+        },
+        "gogoCodeLens.codelens.struct.references.emptyText": {
+          "type": "string",
+          "default": "",
+          "description": "Text displayed above a struct when no references are found. Leave empty to disable the annotation."
+        },
+        "gogoCodeLens.codelens.struct.implementFrom.isEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable CodeLens annotations above structs to show how many interfaces they implement."
+        },
+        "gogoCodeLens.codelens.struct.implementFrom.singularTemplate": {
+          "type": "string",
+          "default": "↑↑ from interface",
+          "description": "Template text displayed above a struct that implements exactly one interface."
+        },
+        "gogoCodeLens.codelens.struct.implementFrom.pluralTemplate": {
+          "type": "string",
+          "default": "↑↑ from interface ({{ count }})",
+          "description": "Template text displayed above a struct that implements multiple interfaces."
+        },
+        "gogoCodeLens.codelens.struct.implementFrom.emptyText": {
+          "type": "string",
+          "default": "",
+          "description": "Text displayed above a struct that does not implement any interfaces. Leave empty to disable the annotation."
+        }
+      }
+    },
+    "languages": [
+      {
+        "id": "go",
+        "extensions": [
+          ".go"
+        ]
+      }
+    ]
+  },
+  "activationEvents": [
+    "onLanguage:go"
+  ],
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/mocha": "^10.0.7",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.93.0",
+    "@typescript-eslint/eslint-plugin": "^8.3.0",
+    "@typescript-eslint/parser": "^8.3.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "esbuild": "^0.25.5",
+    "eslint": "^9.9.1",
+    "eslint-config-prettier": "^9.1.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4"
+  },
+  "engines": {
+    "vscode": "^1.93.0"
+  },
+  "icon": "logo.png"
+}
