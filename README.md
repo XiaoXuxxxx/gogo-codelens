@@ -24,7 +24,7 @@ A VS Code extension that adds CodeLens annotations to your Go code. showing refe
 
 ### Option 1: Install from VS Code Marketplace
 
-> Coming soon
+You can download it from https://marketplace.visualstudio.com/items?itemName=xiaoxuxxxx.gogo-codelens
 
 ### Option 2: Build and Install Locally
 
