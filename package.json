@@ -12,7 +12,9 @@
     "golang",
     "CodeLens",
     "implementation",
-    "interface"
+    "interface",
+    "reference",
+    "relation"
   ],
   "repository": {
     "type": "git",
@@ -37,7 +39,7 @@
   },
   "contributes": {
     "configuration": {
-      "title": "Go CodeLens",
+      "title": "GoGo CodeLens",
       "properties": {
         "gogoCodeLens.codelens.enabled.showReferences": {
           "type": "boolean",
@@ -126,7 +128,7 @@
         },
         "gogoCodeLens.codelens.childMethodInterface.references.emptyText": {
           "type": "string",
-          "default": "",
+          "default": "0 references",
           "description": "Text displayed above an interface method when no references are found. Leave empty to disable the annotation."
         },
         "gogoCodeLens.codelens.childMethodInterface.implementBy.isEnabled": {
@@ -146,7 +148,7 @@
         },
         "gogoCodeLens.codelens.childMethodInterface.implementBy.emptyText": {
           "type": "string",
-          "default": "",
+          "default": "no implementation",
           "description": "Text displayed above an interface method when no implementations are found. Leave empty to disable the annotation."
         },
         "gogoCodeLens.codelens.method.references.isEnabled": {

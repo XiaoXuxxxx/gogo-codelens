@@ -7,7 +7,7 @@ A VS Code extension that adds CodeLens annotations to your Go code. showing refe
 - Show reference count above `function`, `interface`, `interface method`, `method`, and `struct` in Go code
 - Show number of symbols implementing an `interface` or `interface method`
 - Show number of interfaces implemented by a `method` or `struct`
-- Fully customizable — You can enable/disable each annotation type and change how the codelens should be displayed
+- Fully customizable — You can [enable/disable](#configuration) each annotation type and change how the codelens should be displayed
 
 | Interface | Method |
 |---------|---------|
@@ -17,7 +17,7 @@ A VS Code extension that adds CodeLens annotations to your Go code. showing refe
 |---------|-------------|
 |![function_ref](./docs/images/function_ref.png)|![struct_all](./docs/images/struct_all.png)|
 
-> Don't worry, all annotations are fully customizable and can be turned off if you prefer a cleaner view.
+> Don't worry, all annotations are fully [customizable](#configuration) and can be turned off if you prefer a cleaner view.
 
 
 ## Installation
@@ -130,7 +130,7 @@ You can configure the extension in your VS Code `settings.json` or through the s
 | `gogoCodeLens.codelens.childMethodInterface.references.isEnabled` | Enable CodeLens annotations above interface methods to show how many times they are referenced. | `true` |
 | `gogoCodeLens.codelens.childMethodInterface.references.singularTemplate` | Template text displayed above an interface method with exactly one reference. | `{{ count }} reference` |
 | `gogoCodeLens.codelens.childMethodInterface.references.pluralTemplate` | Template text displayed above an interface method with multiple references. | `{{ count }} references` |
-| `gogoCodeLens.codelens.childMethodInterface.references.emptyText` | Text displayed above an interface method when no references are found. Leave empty to disable the annotation. | *(empty — hides CodeLens)* |
+| `gogoCodeLens.codelens.childMethodInterface.references.emptyText` | Text displayed above an interface method when no references are found. Leave empty to disable the annotation. | `0 references` |
 
 ### Child method interface Configuration - `implementBy`
 
@@ -144,7 +144,7 @@ You can configure the extension in your VS Code `settings.json` or through the s
 | `gogoCodeLens.codelens.childMethodInterface.implementBy.isEnabled` | Enable CodeLens annotations above interface methods to show how many types implement them. | `true` |
 | `gogoCodeLens.codelens.childMethodInterface.implementBy.singularTemplate` | Template text displayed above an interface method with exactly one implementation. | `↓↓ implemented below` |
 | `gogoCodeLens.codelens.childMethodInterface.implementBy.pluralTemplate` | Template text displayed above an interface method with multiple implementations. | `↓↓ implemented by {{ count }}` |
-| `gogoCodeLens.codelens.childMethodInterface.implementBy.emptyText` | Text displayed above an interface method when no implementations are found. Leave empty to disable the annotation. | *(empty — hides CodeLens)* |
+| `gogoCodeLens.codelens.childMethodInterface.implementBy.emptyText` | Text displayed above an interface method when no implementations are found. Leave empty to disable the annotation. | `no implementation` |
 
 ### Method Configuration - `references`
 
