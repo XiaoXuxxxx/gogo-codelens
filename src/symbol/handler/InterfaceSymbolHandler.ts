@@ -46,19 +46,26 @@ export class InterfaceSymbolHandler implements SymbolHandleable {
     const results = await Promise.all(promises);
     const codeLenses: vscode.CodeLens[] = results.filter((lens): lens is vscode.CodeLens => lens !== null);
 
-    const childMethods = (symbol as vscode.DocumentSymbol).children
-      .filter((child): child is vscode.DocumentSymbol => child.kind === vscode.SymbolKind.Method);
-    
-    const futureChildCodeLenses = childMethods.map(method => 
-      this.generateFromChildMethod(
-        document,
-        method as vscode.SymbolInformation & vscode.DocumentSymbol,
-      )
+    const childMethods = (symbol as vscode.DocumentSymbol).children.filter(
+      (child): child is vscode.DocumentSymbol => child.kind === vscode.SymbolKind.Method,
     );
 
-    const childCodeLenses = await Promise.all(futureChildCodeLenses);
+    if (childMethods.length === 0) {
+      return codeLenses;
+    }
 
-    return [...codeLenses, ...childCodeLenses.flat()];
+    const futureChildCodeLenses: Promise<vscode.CodeLens | null>[] = [];
+    for (const method of childMethods) {
+      futureChildCodeLenses.push(
+        this.generateChildMethodImplementationCodeLens(document, method, this.childMethodImplementByCodeLensMaker),
+        this.generateChildMethodReferenceCodeLens(document, method, this.childMethodReferenceCodeLensMaker),
+      );
+    }
+
+    const unFilteredChildCodeLenses = await Promise.all(futureChildCodeLenses);
+    const childCodeLenses = unFilteredChildCodeLenses.filter((lens): lens is vscode.CodeLens => lens !== null);
+
+    return [...codeLenses, ...childCodeLenses];
   }
 
   private async generateReferenceCodeLens(
@@ -109,19 +116,6 @@ export class InterfaceSymbolHandler implements SymbolHandleable {
     }
 
     return null;
-  }
-
-  private async generateFromChildMethod(
-    document: vscode.TextDocument,
-    symbol: vscode.DocumentSymbol,
-  ): Promise<vscode.CodeLens[]> {
-    const promises: Promise<vscode.CodeLens | null>[] = [];
-
-    promises.push(this.generateChildMethodImplementationCodeLens(document, symbol, this.childMethodImplementByCodeLensMaker));
-    promises.push(this.generateChildMethodReferenceCodeLens(document, symbol, this.childMethodReferenceCodeLensMaker));
-
-    const results = await Promise.all(promises);
-    return results.filter((lens): lens is vscode.CodeLens => lens !== null);
   }
 
   private async generateChildMethodReferenceCodeLens(
