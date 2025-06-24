@@ -29,33 +29,62 @@ export class StructSymbolHandler implements SymbolHandleable {
     document: vscode.TextDocument,
     symbol: vscode.DocumentSymbol,
   ): Promise<vscode.CodeLens[]> {
-    const { start } = symbol.range;
+    const promises: Promise<vscode.CodeLens | null>[] = [];
 
-    const [methodImplementationLocations, referenceLocations] = await Promise.all([
-      this.vsCodeWrapper.executeImplementationProvider(document.uri, start.line, start.character),
-      this.vsCodeWrapper.executeReferenceProvider(document.uri, start.line, start.character),
-    ]);
+    promises.push(this.generateImplementationCodeLens(document, symbol, this.implementFromCodeLensMaker));
+    promises.push(this.generateReferenceCodeLens(document, symbol, this.referenceCodeLensMaker));
 
-    const codeLenses: vscode.CodeLens[] = [];
+    const results = await Promise.all(promises);
+    return results.filter((lens): lens is vscode.CodeLens => lens !== null);
+  }
 
-    if (this.implementFromCodeLensMaker.getShouldShow()) {
-      if (methodImplementationLocations.length > 0 || this.implementFromCodeLensMaker.isEmptyTitleTextConfigure()) {
-        codeLenses.push(
-          this.implementFromCodeLensMaker.build(document.uri, symbol.range, methodImplementationLocations),
-        );
-      }
+  private async generateReferenceCodeLens(
+    document: vscode.TextDocument,
+    symbol: vscode.DocumentSymbol,
+    codeLensMaker: CodeLensMaker,
+  ): Promise<vscode.CodeLens | null> {
+    if (!codeLensMaker.getShouldShow()) {
+      return null;
     }
+
+    const { start } = symbol.range;
+    const referenceLocations = await this.vsCodeWrapper.executeReferenceProvider(
+      document.uri,
+      start.line,
+      start.character,
+    );
 
     const nonSelfReferenceLocations = referenceLocations.filter(
       (e) => !(e.uri.fsPath === document.uri.fsPath && e.range.start.line === start.line),
     );
 
-    if (this.referenceCodeLensMaker.getShouldShow()) {
-      if (nonSelfReferenceLocations.length > 0 || this.referenceCodeLensMaker.isEmptyTitleTextConfigure()) {
-        codeLenses.push(this.referenceCodeLensMaker.build(document.uri, symbol.range, nonSelfReferenceLocations));
-      }
+    if (nonSelfReferenceLocations.length > 0 || codeLensMaker.isEmptyTitleTextConfigure()) {
+      return codeLensMaker.build(document.uri, symbol.range, nonSelfReferenceLocations);
     }
 
-    return codeLenses;
+    return null;
+  }
+
+  private async generateImplementationCodeLens(
+    document: vscode.TextDocument,
+    symbol: vscode.DocumentSymbol,
+    codeLensMaker: CodeLensMaker,
+  ): Promise<vscode.CodeLens | null> {
+    if (!codeLensMaker.getShouldShow()) {
+      return null;
+    }
+
+    const { start } = symbol.range;
+    const implementationLocations = await this.vsCodeWrapper.executeImplementationProvider(
+      document.uri,
+      start.line,
+      start.character,
+    );
+
+    if (implementationLocations.length > 0 || codeLensMaker.isEmptyTitleTextConfigure()) {
+      return codeLensMaker.build(document.uri, symbol.range, implementationLocations);
+    }
+
+    return null;
   }
 }

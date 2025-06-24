@@ -35,35 +35,66 @@ export class MethodSymbolHandler implements SymbolHandleable {
       return [];
     }
 
-    const { start } = symbol.range;
-
     const charPosition = this.getMethodCharPosition(document, symbol.range);
-    const [methodImplementationLocations, referenceLocations] = await Promise.all([
-      this.vsCodeWrapper.executeImplementationProvider(document.uri, start.line, charPosition),
-      this.vsCodeWrapper.executeReferenceProvider(document.uri, start.line, charPosition),
-    ]);
+    const promises: Promise<vscode.CodeLens | null>[] = [];
 
-    const codeLenses: vscode.CodeLens[] = [];
+    promises.push(this.generateImplementationCodeLens(document, symbol, this.implementFromCodeLensMaker, charPosition));
+    promises.push(this.generateReferenceCodeLens(document, symbol, this.referenceCodeLensMaker, charPosition));
 
-    if (this.implementFromCodeLensMaker.getShouldShow()) {
-      if (methodImplementationLocations.length > 0 || this.implementFromCodeLensMaker.isEmptyTitleTextConfigure()) {
-        codeLenses.push(
-          this.implementFromCodeLensMaker.build(document.uri, symbol.range, methodImplementationLocations),
-        );
-      }
+    const results = await Promise.all(promises);
+    return results.filter((lens): lens is vscode.CodeLens => lens !== null);
+  }
+
+  private async generateReferenceCodeLens(
+    document: vscode.TextDocument,
+    symbol: vscode.DocumentSymbol,
+    codeLensMaker: CodeLensMaker,
+    charPosition: number,
+  ): Promise<vscode.CodeLens | null> {
+    if (!codeLensMaker.getShouldShow()) {
+      return null;
     }
+
+    const { start } = symbol.range;
+    const referenceLocations = await this.vsCodeWrapper.executeReferenceProvider(
+      document.uri,
+      start.line,
+      charPosition,
+    );
 
     const nonSelfReferenceLocations = referenceLocations.filter(
       (e) => !(e.range.start.line === start.line && e.uri.fsPath === document.uri.fsPath),
     );
 
-    if (this.referenceCodeLensMaker.getShouldShow()) {
-      if (nonSelfReferenceLocations.length > 0 || this.referenceCodeLensMaker.isEmptyTitleTextConfigure()) {
-        codeLenses.push(this.referenceCodeLensMaker.build(document.uri, symbol.range, nonSelfReferenceLocations));
-      }
+    if (nonSelfReferenceLocations.length > 0 || codeLensMaker.isEmptyTitleTextConfigure()) {
+      return codeLensMaker.build(document.uri, symbol.range, nonSelfReferenceLocations);
     }
 
-    return codeLenses;
+    return null;
+  }
+
+  private async generateImplementationCodeLens(
+    document: vscode.TextDocument,
+    symbol: vscode.DocumentSymbol,
+    codeLensMaker: CodeLensMaker,
+    charPosition: number,
+  ): Promise<vscode.CodeLens | null> {
+    if (!codeLensMaker.getShouldShow()) {
+      return null;
+    }
+
+    const { start } = symbol.range;
+    const implementationLocations = await this.vsCodeWrapper.executeImplementationProvider(
+      document.uri,
+      start.line,
+      charPosition,
+    );
+
+    if (implementationLocations.length > 0 || codeLensMaker.isEmptyTitleTextConfigure()) {
+      return codeLensMaker.build(document.uri, symbol.range, implementationLocations);
+    }
+
+    return null;
   }
 
   private getMethodCharPosition(document: vscode.TextDocument, range: vscode.Range): number {

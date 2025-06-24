@@ -38,30 +38,13 @@ export class InterfaceSymbolHandler implements SymbolHandleable {
     document: vscode.TextDocument,
     symbol: vscode.DocumentSymbol,
   ): Promise<vscode.CodeLens[]> {
-    const { start } = symbol.range;
+    const promises: Promise<vscode.CodeLens | null>[] = [];
 
-    const [methodImplementationLocations, referenceLocations] = await Promise.all([
-      this.vsCodeWrapper.executeImplementationProvider(document.uri, start.line, start.character),
-      this.vsCodeWrapper.executeReferenceProvider(document.uri, start.line, start.character),
-    ]);
+    promises.push(this.generateImplementationCodeLens(document, symbol, this.implementByCodeLensMaker));
+    promises.push(this.generateReferenceCodeLens(document, symbol, this.referenceCodeLensMaker));
 
-    const codeLenses: vscode.CodeLens[] = [];
-
-    if (this.implementByCodeLensMaker.getShouldShow()) {
-      if (methodImplementationLocations.length > 0 || this.implementByCodeLensMaker.isEmptyTitleTextConfigure()) {
-        codeLenses.push(this.implementByCodeLensMaker.build(document.uri, symbol.range, methodImplementationLocations));
-      }
-    }
-
-    const nonSelfReferenceLocations = referenceLocations.filter(
-      (e) => !(e.range.start.isEqual(start) && e.uri === document.uri),
-    );
-
-    if (this.referenceCodeLensMaker.getShouldShow()) {
-      if (nonSelfReferenceLocations.length > 0 || this.referenceCodeLensMaker.isEmptyTitleTextConfigure()) {
-        codeLenses.push(this.referenceCodeLensMaker.build(document.uri, symbol.range, nonSelfReferenceLocations));
-      }
-    }
+    const results = await Promise.all(promises);
+    const codeLenses: vscode.CodeLens[] = results.filter((lens): lens is vscode.CodeLens => lens !== null);
 
     const futureChildCodeLenses: Promise<vscode.CodeLens[]>[] = [];
     for (const method of (symbol as vscode.DocumentSymbol).children) {
@@ -79,42 +62,116 @@ export class InterfaceSymbolHandler implements SymbolHandleable {
     return [...codeLenses, ...childCodeLenses.flat()];
   }
 
+  private async generateReferenceCodeLens(
+    document: vscode.TextDocument,
+    symbol: vscode.DocumentSymbol,
+    codeLensMaker: CodeLensMaker,
+  ): Promise<vscode.CodeLens | null> {
+    if (!codeLensMaker.getShouldShow()) {
+      return null;
+    }
+
+    const { start } = symbol.range;
+    const referenceLocations = await this.vsCodeWrapper.executeReferenceProvider(
+      document.uri,
+      start.line,
+      start.character,
+    );
+
+    const nonSelfReferenceLocations = referenceLocations.filter(
+      (e) => !(e.range.start.isEqual(start) && e.uri === document.uri),
+    );
+
+    if (nonSelfReferenceLocations.length > 0 || codeLensMaker.isEmptyTitleTextConfigure()) {
+      return codeLensMaker.build(document.uri, symbol.range, nonSelfReferenceLocations);
+    }
+
+    return null;
+  }
+
+  private async generateImplementationCodeLens(
+    document: vscode.TextDocument,
+    symbol: vscode.DocumentSymbol,
+    codeLensMaker: CodeLensMaker,
+  ): Promise<vscode.CodeLens | null> {
+    if (!codeLensMaker.getShouldShow()) {
+      return null;
+    }
+
+    const { start } = symbol.range;
+    const implementationLocations = await this.vsCodeWrapper.executeImplementationProvider(
+      document.uri,
+      start.line,
+      start.character,
+    );
+
+    if (implementationLocations.length > 0 || codeLensMaker.isEmptyTitleTextConfigure()) {
+      return codeLensMaker.build(document.uri, symbol.range, implementationLocations);
+    }
+
+    return null;
+  }
+
   private async generateFromChildMethod(
     document: vscode.TextDocument,
     symbol: vscode.DocumentSymbol,
   ): Promise<vscode.CodeLens[]> {
-    const { start } = symbol.range;
+    const promises: Promise<vscode.CodeLens | null>[] = [];
 
-    const [methodImplementationLocations, referenceLocations] = await Promise.all([
-      this.vsCodeWrapper.executeImplementationProvider(document.uri, start.line, start.character),
-      this.vsCodeWrapper.executeReferenceProvider(document.uri, start.line, start.character),
-    ]);
+    promises.push(this.generateChildMethodImplementationCodeLens(document, symbol, this.childMethodImplementByCodeLensMaker));
+    promises.push(this.generateChildMethodReferenceCodeLens(document, symbol, this.childMethodReferenceCodeLensMaker));
 
-    const codeLenses: vscode.CodeLens[] = [];
+    const results = await Promise.all(promises);
+    return results.filter((lens): lens is vscode.CodeLens => lens !== null);
+  }
 
-    if (this.childMethodImplementByCodeLensMaker.getShouldShow()) {
-      if (
-        methodImplementationLocations.length > 0 ||
-        this.childMethodImplementByCodeLensMaker.isEmptyTitleTextConfigure()
-      ) {
-        codeLenses.push(
-          this.childMethodImplementByCodeLensMaker.build(document.uri, symbol.range, methodImplementationLocations),
-        );
-      }
+  private async generateChildMethodReferenceCodeLens(
+    document: vscode.TextDocument,
+    symbol: vscode.DocumentSymbol,
+    codeLensMaker: CodeLensMaker,
+  ): Promise<vscode.CodeLens | null> {
+    if (!codeLensMaker.getShouldShow()) {
+      return null;
     }
+
+    const { start } = symbol.range;
+    const referenceLocations = await this.vsCodeWrapper.executeReferenceProvider(
+      document.uri,
+      start.line,
+      start.character,
+    );
 
     const nonSelfReferenceLocations = referenceLocations.filter(
       (e) => !(e.range.start.line === start.line && e.uri.path === document.uri.path),
     );
 
-    if (this.childMethodReferenceCodeLensMaker.getShouldShow()) {
-      if (nonSelfReferenceLocations.length > 0 || this.childMethodReferenceCodeLensMaker.isEmptyTitleTextConfigure()) {
-        codeLenses.push(
-          this.childMethodReferenceCodeLensMaker.build(document.uri, symbol.range, nonSelfReferenceLocations),
-        );
-      }
+    if (nonSelfReferenceLocations.length > 0 || codeLensMaker.isEmptyTitleTextConfigure()) {
+      return codeLensMaker.build(document.uri, symbol.range, nonSelfReferenceLocations);
     }
 
-    return codeLenses;
+    return null;
+  }
+
+  private async generateChildMethodImplementationCodeLens(
+    document: vscode.TextDocument,
+    symbol: vscode.DocumentSymbol,
+    codeLensMaker: CodeLensMaker,
+  ): Promise<vscode.CodeLens | null> {
+    if (!codeLensMaker.getShouldShow()) {
+      return null;
+    }
+
+    const { start } = symbol.range;
+    const implementationLocations = await this.vsCodeWrapper.executeImplementationProvider(
+      document.uri,
+      start.line,
+      start.character,
+    );
+
+    if (implementationLocations.length > 0 || codeLensMaker.isEmptyTitleTextConfigure()) {
+      return codeLensMaker.build(document.uri, symbol.range, implementationLocations);
+    }
+
+    return null;
   }
 }
