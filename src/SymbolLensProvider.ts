@@ -17,6 +17,10 @@ export class SymbolCodeLensProvider implements vscode.CodeLensProvider {
     _token: vscode.CancellationToken,
   ): Promise<vscode.CodeLens[]> {
     const symbols = await this.vsCodeWrapper.executeDocumentSymbolProvider(document.uri);
+    
+    if (symbols.length === 0) {
+      return [];
+    }
 
     const futureCodeLenses: Promise<vscode.CodeLens[]>[] = [];
     
@@ -25,6 +29,10 @@ export class SymbolCodeLensProvider implements vscode.CodeLensProvider {
       if (symbolHandler) {
         futureCodeLenses.push(symbolHandler.generateCodeLensFromSymbol(document, symbol));
       }
+    }
+    
+    if (futureCodeLenses.length === 0) {
+      return [];
     }
 
     const codeLens = await Promise.all(futureCodeLenses);
