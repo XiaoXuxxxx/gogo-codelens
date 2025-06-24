@@ -6,8 +6,6 @@ import { VsCodeWrapper } from '@/src/vscode/VsCodeWrapper';
 
 export class MethodSymbolHandler implements SymbolHandleable {
   protected readonly symbolKind = vscode.SymbolKind.Method;
-  private readonly METHOD_REGEX = /func\s*\(\w*\s*\*?\w*\)\s*(\w+)\s*\(/;
-  private readonly RECEIVER_REGEX = /\(.*\)/;
 
   private readonly vsCodeWrapper: VsCodeWrapper;
   private readonly implementFromCodeLensMaker: CodeLensMaker;
@@ -31,15 +29,13 @@ export class MethodSymbolHandler implements SymbolHandleable {
     document: vscode.TextDocument,
     symbol: vscode.DocumentSymbol,
   ): Promise<vscode.CodeLens[]> {
-    if (!this.hasReceiver(document, symbol.range)) {
-      return [];
-    }
-
-    const charPosition = this.getMethodCharPosition(document, symbol.range);
+    const methodNamePosition = this.getMethodCharPosition(document, symbol.range);
     const promises: Promise<vscode.CodeLens | null>[] = [];
 
-    promises.push(this.generateImplementationCodeLens(document, symbol, this.implementFromCodeLensMaker, charPosition));
-    promises.push(this.generateReferenceCodeLens(document, symbol, this.referenceCodeLensMaker, charPosition));
+    promises.push(
+      this.generateImplementationCodeLens(document, symbol, this.implementFromCodeLensMaker, methodNamePosition),
+    );
+    promises.push(this.generateReferenceCodeLens(document, symbol, this.referenceCodeLensMaker, methodNamePosition));
 
     const results = await Promise.all(promises);
     return results.filter((lens): lens is vscode.CodeLens => lens !== null);
@@ -49,21 +45,20 @@ export class MethodSymbolHandler implements SymbolHandleable {
     document: vscode.TextDocument,
     symbol: vscode.DocumentSymbol,
     codeLensMaker: CodeLensMaker,
-    charPosition: number,
+    position: vscode.Position,
   ): Promise<vscode.CodeLens | null> {
     if (!codeLensMaker.getShouldShow()) {
       return null;
     }
 
-    const { start } = symbol.range;
     const referenceLocations = await this.vsCodeWrapper.executeReferenceProvider(
       document.uri,
-      start.line,
-      charPosition,
+      position.line,
+      position.character,
     );
 
     const nonSelfReferenceLocations = referenceLocations.filter(
-      (e) => !(e.range.start.line === start.line && e.uri.fsPath === document.uri.fsPath),
+      (e) => !(e.range.start.line === position.line && e.uri.fsPath === document.uri.fsPath),
     );
 
     if (nonSelfReferenceLocations.length > 0 || codeLensMaker.isEmptyTitleTextConfigure()) {
@@ -77,17 +72,16 @@ export class MethodSymbolHandler implements SymbolHandleable {
     document: vscode.TextDocument,
     symbol: vscode.DocumentSymbol,
     codeLensMaker: CodeLensMaker,
-    charPosition: number,
+    position: vscode.Position,
   ): Promise<vscode.CodeLens | null> {
     if (!codeLensMaker.getShouldShow()) {
       return null;
     }
 
-    const { start } = symbol.range;
     const implementationLocations = await this.vsCodeWrapper.executeImplementationProvider(
       document.uri,
-      start.line,
-      charPosition,
+      position.line,
+      position.character,
     );
 
     if (implementationLocations.length > 0 || codeLensMaker.isEmptyTitleTextConfigure()) {
@@ -97,36 +91,55 @@ export class MethodSymbolHandler implements SymbolHandleable {
     return null;
   }
 
-  private getMethodCharPosition(document: vscode.TextDocument, range: vscode.Range): number {
-    try {
-      const firstLine = document.lineAt(range.start.line).text;
+  private getMethodCharPosition(document: vscode.TextDocument, range: vscode.Range): vscode.Position {
+    let isFoundParenthesis = false;
+    let isNowInsideTheComment = false;
+    let weight = 0;
 
-      const match = this.METHOD_REGEX.exec(firstLine);
-      if (!match || !match[1]) {
-        return 0;
+    for (let lineNumber = range.start.line; lineNumber < range.end.line; lineNumber++) {
+      const currentLineCharacters = document.lineAt(lineNumber).text;
+      const characterCount = currentLineCharacters.length;
+
+      for (let currentCharacterIndex = 0; currentCharacterIndex < characterCount; currentCharacterIndex++) {
+        const currentCharacter = currentLineCharacters[currentCharacterIndex];
+        const nextCharacter = currentLineCharacters[currentCharacterIndex + 1];
+
+        if (currentCharacter === ' ') {
+          continue;
+        }
+
+        if (isNowInsideTheComment) {
+          if (currentCharacter === '*' && nextCharacter === '/') {
+            isNowInsideTheComment = false;
+          }
+
+          continue;
+        }
+
+        // now not in the inside
+
+        if (currentCharacter === '/' && nextCharacter === '*') {
+          isNowInsideTheComment = true;
+          continue;
+        }
+
+        if (currentCharacter === '(') {
+          weight++;
+          isFoundParenthesis = true;
+          continue;
+        }
+
+        if (currentCharacter === ')') {
+          weight--;
+          continue;
+        }
+
+        if (isFoundParenthesis && weight === 0 && currentCharacter !== '*' && currentCharacter !== '/') {
+          return new vscode.Position(lineNumber, currentCharacterIndex);
+        }
       }
-
-      const functionName = match[1];
-      const functionNameIndex = match[0].indexOf(functionName);
-
-      if (functionNameIndex === -1) {
-        return 0;
-      }
-
-      const position = match.index + functionNameIndex;
-
-      return position;
-    } catch (error) {
-      return 0;
     }
-  }
 
-  private hasReceiver(document: vscode.TextDocument, range: vscode.Range) {
-    try {
-      const lineText = document.lineAt(range.start.line).text;
-      return this.RECEIVER_REGEX.test(lineText);
-    } catch (error) {
-      return false;
-    }
+    return new vscode.Position(range.start.line, 0);
   }
 }

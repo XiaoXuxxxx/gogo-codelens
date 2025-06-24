@@ -9,7 +9,6 @@ import { VsCodeWrapper } from '@/src/vscode/VsCodeWrapper';
 //
 export class FunctionSymbolHandler implements SymbolHandleable {
   protected readonly symbolKind = vscode.SymbolKind.Function;
-  private readonly FUNCTION_REGEX = /func\s+(\w+)\s*\(/;
 
   private readonly vsCodeWrapper: VsCodeWrapper;
   private readonly referenceCodeLensMaker: CodeLensMaker;
@@ -31,17 +30,15 @@ export class FunctionSymbolHandler implements SymbolHandleable {
       return [];
     }
 
-    const { start } = symbol.range;
-
-    const charPosition = this.getFunctionCharPosition(document, symbol.range);
+    const functionNamePosition = this.getFunctionCharPosition(document, symbol.range);
     const referenceLocations = await this.vsCodeWrapper.executeReferenceProvider(
       document.uri,
-      start.line,
-      charPosition,
+      functionNamePosition.line,
+      functionNamePosition.character,
     );
 
     const nonSelfReferenceLocations = referenceLocations.filter(
-      (e) => !(e.uri.fsPath === document.uri.fsPath && e.range.start.line === start.line),
+      (e) => !(e.uri.fsPath === document.uri.fsPath && e.range.start.line === functionNamePosition.line),
     );
 
     if (nonSelfReferenceLocations.length === 0) {
@@ -51,27 +48,22 @@ export class FunctionSymbolHandler implements SymbolHandleable {
     return [this.referenceCodeLensMaker.build(document.uri, symbol.range, nonSelfReferenceLocations)];
   }
 
-  private getFunctionCharPosition(document: vscode.TextDocument, range: vscode.Range): number {
-    try {
-      const firstLine = document.lineAt(range.start.line).text;
+  private getFunctionCharPosition(document: vscode.TextDocument, range: vscode.Range): vscode.Position {
+    const line = document.lineAt(range.start.line).text;
 
-      const match = this.FUNCTION_REGEX.exec(firstLine);
-      if (!match || !match[1]) {
-        return 0;
-      }
+    const funcKeyword = 'func';
 
-      const functionName = match[1];
-      const functionNameIndex = match[0].indexOf(functionName);
-
-      if (functionNameIndex === -1) {
-        return 0;
-      }
-
-      const position = match.index + functionNameIndex;
-
-      return position;
-    } catch (error) {
-      return 0;
+    const funcIndex = line.indexOf(funcKeyword);
+    if (funcIndex === -1) {
+      new vscode.Position(range.start.line, 5);
     }
+
+    let currentChar = funcIndex + funcKeyword.length;
+
+    while (currentChar < line.length && line[currentChar] === ' ') {
+      currentChar++;
+    }
+
+    return new vscode.Position(range.start.line, currentChar);
   }
 }
