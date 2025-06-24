@@ -46,16 +46,15 @@ export class InterfaceSymbolHandler implements SymbolHandleable {
     const results = await Promise.all(promises);
     const codeLenses: vscode.CodeLens[] = results.filter((lens): lens is vscode.CodeLens => lens !== null);
 
-    const futureChildCodeLenses: Promise<vscode.CodeLens[]>[] = [];
-    for (const method of (symbol as vscode.DocumentSymbol).children) {
-      if (method.kind === vscode.SymbolKind.Method) {
-        const futureCodeLens = this.generateFromChildMethod(
-          document,
-          method as vscode.SymbolInformation & vscode.DocumentSymbol,
-        );
-        futureChildCodeLenses.push(futureCodeLens);
-      }
-    }
+    const childMethods = (symbol as vscode.DocumentSymbol).children
+      .filter((child): child is vscode.DocumentSymbol => child.kind === vscode.SymbolKind.Method);
+    
+    const futureChildCodeLenses = childMethods.map(method => 
+      this.generateFromChildMethod(
+        document,
+        method as vscode.SymbolInformation & vscode.DocumentSymbol,
+      )
+    );
 
     const childCodeLenses = await Promise.all(futureChildCodeLenses);
 

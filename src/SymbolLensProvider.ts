@@ -18,12 +18,14 @@ export class SymbolCodeLensProvider implements vscode.CodeLensProvider {
   ): Promise<vscode.CodeLens[]> {
     const symbols = await this.vsCodeWrapper.executeDocumentSymbolProvider(document.uri);
 
-    const futureCodeLenses = symbols
-      .map((symbol) => {
-        const symbolHandler = this.symbolHandlerRegistry.getSymbolHandlerBySymbolKind(symbol.kind);
-        return symbolHandler ? symbolHandler.generateCodeLensFromSymbol(document, symbol) : null;
-      })
-      .filter((promise): promise is Promise<vscode.CodeLens[]> => promise !== null);
+    const futureCodeLenses: Promise<vscode.CodeLens[]>[] = [];
+    
+    for (const symbol of symbols) {
+      const symbolHandler = this.symbolHandlerRegistry.getSymbolHandlerBySymbolKind(symbol.kind);
+      if (symbolHandler) {
+        futureCodeLenses.push(symbolHandler.generateCodeLensFromSymbol(document, symbol));
+      }
+    }
 
     const codeLens = await Promise.all(futureCodeLenses);
 
