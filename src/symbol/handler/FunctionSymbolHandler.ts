@@ -55,7 +55,7 @@ export class FunctionSymbolHandler implements SymbolHandleable {
 
     const funcIndex = line.indexOf(funcKeyword);
     if (funcIndex === -1) {
-      new vscode.Position(range.start.line, 5);
+      return new vscode.Position(range.start.line, 5);
     }
 
     let currentChar = funcIndex + funcKeyword.length;
