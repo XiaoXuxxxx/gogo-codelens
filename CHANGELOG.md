@@ -1,9 +1,25 @@
 # Change Log
 
-All notable changes to the "go-codelens" extension will be documented in this file.
+## [1.0.0] - 2025-06-23
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
+### Added
 
 - Initial release
+
+## [1.0.1] - 2025-06-24
+
+### Added
+
+- (Docs) Add marketplace url
+
+### Fixed
+
+- Improve minor performance (some early return)
+
+## [1.2.0] - 2025-08-06
+
+### Added
+
+- (Docs) Initial changelog document
+- Implement caching for calculated CodeLens results.
+- Added an option to choose the caching strategy.

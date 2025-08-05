@@ -2,6 +2,14 @@
 
 A VS Code extension that adds CodeLens annotations to your Go code. showing reference counts, interface implementations, and method relationships inline.
 
+## What's new
+
+Latest feature:
+- Implement caching for calculated CodeLens results.
+- Added an option to choose the caching strategy.
+
+See full changelog here https://github.com/XiaoXuxxxx/gogo-codelens/blob/main/CHANGELOG.md
+
 ##  Features
 
 - Show reference count above `function`, `interface`, `interface method`, `method`, and `struct` in Go code
@@ -64,6 +72,17 @@ and your `.vsix` file will be generated in workspace directory
 ## Configuration
 
 You can configure the extension in your VS Code `settings.json` or through the settings UI.
+
+### Caching Strategy
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| `gogoCodeLens.codelens.cacheStrategy` | Define the caching strategy when generating the codelens | `VERSION_AND_TIMESTAMP` |
+
+| Possible Value | Description |
+|---------|-------------|
+| `VERSION_AND_TIMESTAMP` | Caches results based on the document version and the last updated dattime of all documents |
+| `NO_CACHE` | Disables caching, forcing recalculation every time the file is switched or edited.  |
 
 ### Main switch configuration
 
