@@ -41,6 +41,15 @@
     "configuration": {
       "title": "GoGo CodeLens",
       "properties": {
+        "gogoCodeLens.codelens.cacheStrategy": {
+          "type": "string",
+          "default": "VERSION_AND_TIMESTAMP",
+          "enum": [
+            "VERSION_AND_TIMESTAMP",
+            "NO_CACHE"
+          ],
+          "description": "Define the caching strategy when generating the codelens"
+        },
         "gogoCodeLens.codelens.enabled.showReferences": {
           "type": "boolean",
           "default": true,

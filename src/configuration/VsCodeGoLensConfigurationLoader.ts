@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { Configuration, ConfigurationLoader } from '@/src/configuration/Configuration';
+import { CacheStrategyConfigKey, Configuration, ConfigurationLoader } from '@/src/configuration/Configuration';
 
 export class VsCodeGoLensConfigurationLoader implements ConfigurationLoader {
   private configuration!: Configuration;
@@ -21,6 +21,7 @@ export class VsCodeGoLensConfigurationLoader implements ConfigurationLoader {
     const extensionConfig = vscode.workspace.getConfiguration('gogoCodeLens');
 
     const configuration: Configuration = {
+      cacheStrategy: extensionConfig.get<CacheStrategyConfigKey>('codelens.cacheStrategy')!,
       shouldShowReference: extensionConfig.get<boolean>('codelens.enabled.showReferences')!,
       shouldShowImplementation: extensionConfig.get<boolean>('codelens.enabled.showImplementations')!,
       functionSymbolEntryConfig: {

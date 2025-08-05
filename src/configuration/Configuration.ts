@@ -5,7 +5,10 @@ export type CodeLensDisplayRules = {
   emptyText: string;
 };
 
+export type CacheStrategyConfigKey = 'NO_CACHE' | 'VERSION_AND_TIMESTAMP';
+
 export interface Configuration {
+  cacheStrategy: CacheStrategyConfigKey;
   shouldShowReference: boolean;
   shouldShowImplementation: boolean;
 
