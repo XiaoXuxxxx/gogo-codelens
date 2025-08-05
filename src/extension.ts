@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
-import { SymbolCodeLensProvider } from '@/src/SymbolLensProvider';
 import { CodeLensMaker } from '@/src/codelens/CodeLensMaker';
+import { RelationCodeLensProvider } from '@/src/codelens/provider/RelationCodeLensProvider';
 import { VsCodeGoLensConfigurationLoader } from '@/src/configuration/VsCodeGoLensConfigurationLoader';
 import { TemplateRenderer } from '@/src/renderer/TemplateRenderer';
 import { SymbolHandlerRegistry } from '@/src/symbol/SymbolHandlerRegistry';
@@ -14,7 +14,7 @@ import { VsCodeWrapper } from '@/src/vscode/VsCodeWrapper';
 function createCodeLensProvider(
   configLoader: VsCodeGoLensConfigurationLoader,
   vsCodeWrapper: VsCodeWrapper,
-): SymbolCodeLensProvider {
+): RelationCodeLensProvider {
   const config = configLoader.getConfiguration();
 
   const functionReferenceCodeLensMaker = new CodeLensMaker(
@@ -97,7 +97,7 @@ function createCodeLensProvider(
     new StructSymbolHandler(vsCodeWrapper, structImplementFromCodeLensMaker, structReferenceCodeLensMaker),
   ]);
 
-  const codeLensProvider = new SymbolCodeLensProvider(vsCodeWrapper, symbolHandlerRegistry);
+  const codeLensProvider = new RelationCodeLensProvider(vsCodeWrapper, symbolHandlerRegistry);
 
   return codeLensProvider;
 }
