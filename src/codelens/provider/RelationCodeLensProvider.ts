@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 
+import { CodeLensResultCache } from '@/src/codelens/provider/cache/CodeLensResultCache';
 import { SymbolHandlerRegistry } from '@/src/symbol/SymbolHandlerRegistry';
 import { VsCodeWrapper } from '@/src/vscode/VsCodeWrapper';
 
@@ -7,17 +8,28 @@ export class RelationCodeLensProvider implements vscode.CodeLensProvider {
   private readonly vsCodeWrapper: VsCodeWrapper;
   private readonly symbolHandlerRegistry: SymbolHandlerRegistry;
 
-  public constructor(vscodeWrapper: VsCodeWrapper, symbolHandlerRegistry: SymbolHandlerRegistry) {
+  private readonly codeLensResultCache: CodeLensResultCache;
+
+  public constructor(
+    vscodeWrapper: VsCodeWrapper,
+    symbolHandlerRegistry: SymbolHandlerRegistry,
+    codeLensResultCache: CodeLensResultCache,
+  ) {
     this.vsCodeWrapper = vscodeWrapper;
     this.symbolHandlerRegistry = symbolHandlerRegistry;
+    this.codeLensResultCache = codeLensResultCache;
   }
 
   public async provideCodeLenses(
     document: vscode.TextDocument,
     _token: vscode.CancellationToken,
   ): Promise<vscode.CodeLens[]> {
-    const symbols = await this.vsCodeWrapper.executeDocumentSymbolProvider(document.uri);
+    const cacheCodeLens = this.codeLensResultCache.get(document);
+    if (cacheCodeLens !== undefined) {
+      return cacheCodeLens;
+    }
 
+    const symbols = await this.vsCodeWrapper.executeDocumentSymbolProvider(document.uri);
     if (symbols.length === 0) {
       return [];
     }
@@ -36,7 +48,10 @@ export class RelationCodeLensProvider implements vscode.CodeLensProvider {
     }
 
     const codeLens = await Promise.all(futureCodeLenses);
+    const flattedCodeLens = codeLens.flat();
 
-    return codeLens.flat();
+    this.codeLensResultCache.set(document, flattedCodeLens);
+
+    return flattedCodeLens;
   }
 }

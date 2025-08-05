@@ -2,6 +2,10 @@ import * as vscode from 'vscode';
 
 import { CodeLensMaker } from '@/src/codelens/CodeLensMaker';
 import { RelationCodeLensProvider } from '@/src/codelens/provider/RelationCodeLensProvider';
+import { CodeLensResultCache } from '@/src/codelens/provider/cache/CodeLensResultCache';
+import { NoOpCodeLensCache } from '@/src/codelens/provider/cache/NoOpCodeLensCache';
+import { VersionAndTimestampCodeLensCache } from '@/src/codelens/provider/cache/VersionAndTimestampCodeLensCache';
+import { CacheStrategyConfigKey } from '@/src/configuration/Configuration';
 import { VsCodeGoLensConfigurationLoader } from '@/src/configuration/VsCodeGoLensConfigurationLoader';
 import { TemplateRenderer } from '@/src/renderer/TemplateRenderer';
 import { SymbolHandlerRegistry } from '@/src/symbol/SymbolHandlerRegistry';
@@ -97,7 +101,16 @@ function createCodeLensProvider(
     new StructSymbolHandler(vsCodeWrapper, structImplementFromCodeLensMaker, structReferenceCodeLensMaker),
   ]);
 
-  const codeLensProvider = new RelationCodeLensProvider(vsCodeWrapper, symbolHandlerRegistry);
+  const codeLensResultCacheByConfig: Record<CacheStrategyConfigKey, CodeLensResultCache> = {
+    NO_CACHE: new NoOpCodeLensCache(),
+    VERSION_AND_TIMESTAMP: new VersionAndTimestampCodeLensCache(),
+  };
+
+  const codeLensProvider = new RelationCodeLensProvider(
+    vsCodeWrapper,
+    symbolHandlerRegistry,
+    codeLensResultCacheByConfig[config.cacheStrategy],
+  );
 
   return codeLensProvider;
 }
