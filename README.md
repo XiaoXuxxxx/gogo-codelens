@@ -6,7 +6,7 @@ A VS Code extension that adds CodeLens annotations to your Go code. showing refe
 
 Latest feature:
 - Implement caching for calculated CodeLens results.
-- Added an option to choose the caching strategy.
+- Added an [option](#caching-strategy) to choose the caching strategy.
 
 See full changelog here https://github.com/XiaoXuxxxx/gogo-codelens/blob/main/CHANGELOG.md
 
@@ -83,6 +83,8 @@ You can configure the extension in your VS Code `settings.json` or through the s
 |---------|-------------|
 | `VERSION_AND_TIMESTAMP` | Caches results based on the document version and the last updated dattime of all documents |
 | `NO_CACHE` | Disables caching, forcing recalculation every time the file is switched or edited.  |
+
+> If you notice that the CodeLens is not updating correctly or behaves inconsistently, it may be due to caching issues. To resolve this, consider using `NO_CACHE`
 
 ### Main switch configuration
 
