@@ -16,8 +16,9 @@ See full changelog here https://github.com/XiaoXuxxxx/gogo-codelens/blob/main/CH
 - Fully customizable — You can [enable/disable](#configuration) each annotation type and change how the codelens should be displayed
 
 
-| Interface | Method |
+|  |  |
 |-----------|--------|
+| **Interface** | **Method** |
 | ![interface_everything](./docs/images/interface_everything.png) | ![method_all](./docs/images/method_all.png) |
 | **Function** | **Struct** |
 | ![function_ref](./docs/images/function_ref.png) | ![struct_all](./docs/images/struct_all.png) |
