@@ -1,7 +1,7 @@
 {
   "name": "gogo-codelens",
   "displayName": "GoGo CodeLens",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "A VS Code extension that adds CodeLens annotations to your Go code. showing reference counts, interface implementations, and method relationships inline.",
   "categories": [
     "Programming Languages",
