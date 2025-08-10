@@ -15,113 +15,16 @@ See full changelog here https://github.com/XiaoXuxxxx/gogo-codelens/blob/main/CH
 - Show reference count or implement count above function, interface, interface method, method, struct, type alias, constant, variable in Go code
 - Fully customizable — You can [enable/disable](#configuration) each annotation type and change how the codelens should be displayed
 
-<!-- |            |                                                                 |
-|------------|-----------------------------------------------------------------|
-| Interface  | ![interface_everything](./docs/images/interface_everything.png) |
-| Method     | ![method_all](./docs/images/method_all.png)                     |
-| Function   | ![function_ref](./docs/images/function_ref.png)                 |
-| Struct     | ![struct_all](./docs/images/struct_all.png)                     |
-| Type alias | ![type_alias_all](./docs/images/type_alias_all.png)             |
-| Variable   | ![variable_ref](./docs/images/variable_ref.png)                 |
-| Constant   | ![constant_ref](./docs/images/constant_ref.png)                 | -->
 
-
-<table style="width:100%; table-layout:fixed; border-collapse:collapse;">
-  <colgroup>
-    <col style="width:50%">
-    <col style="width:50%">
-  </colgroup>
-  <thead>
-    <tr>
-      <th>Interface</th>
-      <th>Method</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align:center;">
-        <img src="./docs/images/interface_everything.png" alt="interface_everything" style="max-width:100%; height:auto; display:block; margin:0 auto;">
-      </td>
-      <td style="text-align:center;">
-        <img src="./docs/images/method_all.png" alt="method_all" style="max-width:100%; height:auto; display:block; margin:0 auto;">
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<br/>
-
-<table style="width:100%; table-layout:fixed; border-collapse:collapse;">
-  <colgroup>
-    <col style="width:50%">
-    <col style="width:50%">
-  </colgroup>
-  <thead>
-    <tr>
-      <th>Function</th>
-      <th>Struct</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align:center;">
-        <img src="./docs/images/function_ref.png" alt="function_ref" style="max-width:100%; height:auto; display:block; margin:0 auto;">
-      </td>
-      <td style="text-align:center;">
-        <img src="./docs/images/struct_all.png" alt="struct_all" style="max-width:100%; height:auto; display:block; margin:0 auto;">
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<br/>
-
-<table style="width:100%; table-layout:fixed; border-collapse:collapse;">
-  <colgroup>
-    <col style="width:50%">
-    <col style="width:50%">
-  </colgroup>
-  <thead>
-    <tr>
-      <th>Type alias</th>
-      <th>Variable</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align:center;">
-        <img src="./docs/images/type_alias_all.png" alt="type_alias_all" style="max-width:100%; height:auto; display:block; margin:0 auto;">
-      </td>
-      <td style="text-align:center;">
-        <img src="./docs/images/variable_ref.png" alt="variable_ref" style="max-width:100%; height:auto; display:block; margin:0 auto;">
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<br/>
-
-
-<table style="width:100%; table-layout:fixed; border-collapse:collapse;">
-  <colgroup>
-    <col style="width:50%">
-    <col style="width:50%">
-  </colgroup>
-  <thead>
-    <tr>
-      <th>Constant</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align:center;">
-        <img src="./docs/images/constant_ref.png" alt="constant_ref" style="max-width:100%; height:auto; display:block; margin:0 auto;">
-      </td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+| Interface | Method |
+|-----------|--------|
+| ![interface_everything](./docs/images/interface_everything.png) | ![method_all](./docs/images/method_all.png) |
+| **Function** | **Struct** |
+| ![function_ref](./docs/images/function_ref.png) | ![struct_all](./docs/images/struct_all.png) |
+| **Type alias** | **Variable** |
+| ![type_alias_all](./docs/images/type_alias_all.png) | ![variable_ref](./docs/images/variable_ref.png) |
+| **Constant** |  |
+| ![constant_ref](./docs/images/constant_ref.png) |  |
 
 
 > Don't worry, all annotations are fully [customizable](#configuration) and can be turned off if you prefer a cleaner view.
