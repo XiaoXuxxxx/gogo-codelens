@@ -16,16 +16,16 @@ See full changelog here https://github.com/XiaoXuxxxx/gogo-codelens/blob/main/CH
 - Fully customizable — You can [enable/disable](#configuration) each annotation type and change how the codelens should be displayed
 
 
-|  |  |
-|-----------|--------|
-| **Interface** | **Method** |
-| ![interface_everything](./docs/images/interface_everything.png) | ![method_all](./docs/images/method_all.png) |
-| **Function** | **Struct** |
-| ![function_ref](./docs/images/function_ref.png) | ![struct_all](./docs/images/struct_all.png) |
-| **Type alias** | **Variable** |
-| ![type_alias_all](./docs/images/type_alias_all.png) | ![variable_ref](./docs/images/variable_ref.png) |
-| **Constant** |  |
-| ![constant_ref](./docs/images/constant_ref.png) |  |
+|                                                                 |                                                      |
+|-----------------------------------------------------------------|------------------------------------------------------|
+| [**Interface**](#interface-configuration---references)          | [**Method**](#method-configuration---references)     |
+| ![interface_everything](./docs/images/interface_everything.png) | ![method_all](./docs/images/method_all.png)          |
+| [**Function**](#function-configuration---references)            | [**Struct**](#struct-configuration---references)     |
+| ![function_ref](./docs/images/function_ref.png)                 | ![struct_all](./docs/images/struct_all.png)          |
+| [**Type alias**](#type-alias-configuration---references)        | [**Variable**](#variable-configuration---references) |
+| ![type_alias_all](./docs/images/type_alias_all.png)             | ![variable_ref](./docs/images/variable_ref.png)      |
+| [**Constant**](#constant-configuration---references)            |                                                      |
+| ![constant_ref](./docs/images/constant_ref.png)                 |                                                      |
 
 
 > Don't worry, all annotations are fully [customizable](#configuration) and can be turned off if you prefer a cleaner view.
