@@ -5,7 +5,7 @@ import { SymbolHandleable } from '@/src/symbol/handler/SymbolHandleable';
 import { VsCodeWrapper } from '@/src/vscode/VsCodeWrapper';
 
 export class MethodSymbolHandler implements SymbolHandleable {
-  protected readonly symbolKind = vscode.SymbolKind.Method;
+  protected readonly symbolKind: vscode.SymbolKind = vscode.SymbolKind.Method;
 
   private readonly vsCodeWrapper: VsCodeWrapper;
   private readonly implementFromCodeLensMaker: CodeLensMaker;

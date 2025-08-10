@@ -5,7 +5,7 @@ import { SymbolHandleable } from '@/src/symbol/handler/SymbolHandleable';
 import { VsCodeWrapper } from '@/src/vscode/VsCodeWrapper';
 
 export class InterfaceSymbolHandler implements SymbolHandleable {
-  protected readonly symbolKind = vscode.SymbolKind.Interface;
+  protected readonly symbolKind: vscode.SymbolKind = vscode.SymbolKind.Interface;
 
   private readonly vsCodeWrapper: VsCodeWrapper;
 

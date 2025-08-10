@@ -8,7 +8,7 @@ import { VsCodeWrapper } from '@/src/vscode/VsCodeWrapper';
 // normal function
 //
 export class FunctionSymbolHandler implements SymbolHandleable {
-  protected readonly symbolKind = vscode.SymbolKind.Function;
+  protected readonly symbolKind: vscode.SymbolKind = vscode.SymbolKind.Function;
 
   private readonly vsCodeWrapper: VsCodeWrapper;
   private readonly referenceCodeLensMaker: CodeLensMaker;
