@@ -1,10 +1,12 @@
 # Change Log
 
-## [1.0.0] - 2025-06-23
+## [1.2.0] - 2025-08-06
 
 ### Added
 
-- Initial release
+- (Docs) Initial changelog document
+- Implement caching for calculated CodeLens results.
+- Added an option to choose the caching strategy.
 
 ## [1.0.1] - 2025-06-24
 
@@ -16,10 +18,8 @@
 
 - Improve minor performance (some early return)
 
-## [1.2.0] - 2025-08-06
+## [1.0.0] - 2025-06-23
 
 ### Added
 
-- (Docs) Initial changelog document
-- Implement caching for calculated CodeLens results.
-- Added an option to choose the caching strategy.
+- Initial release
