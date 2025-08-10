@@ -4,26 +4,26 @@ A VS Code extension that adds CodeLens annotations to your Go code. showing refe
 
 ## What's new
 
-Latest feature:
-- Implement caching for calculated CodeLens results.
+
+- Added [type alias](#type-alias-configuration---references), [constant](#constant-configuration---references) and [variable](#variable-configuration---references) codelens
 - Added an [option](#caching-strategy) to choose the caching strategy.
 
 See full changelog here https://github.com/XiaoXuxxxx/gogo-codelens/blob/main/CHANGELOG.md
 
 ##  Features
 
-- Show reference count above `function`, `interface`, `interface method`, `method`, and `struct` in Go code
-- Show number of symbols implementing an `interface` or `interface method`
-- Show number of interfaces implemented by a `method` or `struct`
+- Show reference count or implement count above function, interface, interface method, method, struct, type alias, constant, variable in Go code
 - Fully customizable — You can [enable/disable](#configuration) each annotation type and change how the codelens should be displayed
 
-| Interface | Method |
-|---------|---------|
-|![interface_everything](./docs/images/interface_everything.png)|![method_all](./docs/images/method_all.png)|
-
-| Function | Struct |
-|---------|-------------|
-|![function_ref](./docs/images/function_ref.png)|![struct_all](./docs/images/struct_all.png)|
+|            |                                                                 |
+|------------|-----------------------------------------------------------------|
+| Interface  | ![interface_everything](./docs/images/interface_everything.png) |
+| Method     | ![method_all](./docs/images/method_all.png)                     |
+| Function   | ![function_ref](./docs/images/function_ref.png)                 |
+| Struct     | ![struct_all](./docs/images/struct_all.png)                     |
+| Type alias | ![type_alias_all](./docs/images/type_alias_all.png)             |
+| Variable   | ![variable_ref](./docs/images/variable_ref.png)                 |
+| Constant   | ![constant_ref](./docs/images/constant_ref.png)                 |
 
 > Don't worry, all annotations are fully [customizable](#configuration) and can be turned off if you prefer a cleaner view.
 
