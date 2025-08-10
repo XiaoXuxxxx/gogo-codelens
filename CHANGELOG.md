@@ -1,5 +1,17 @@
 # Change Log
 
+## [1.3.1] - 2025-08-10
+
+### Added
+
+- (Docs) Add changelog of 1.3.1
+
+## [1.3.0] - 2025-08-10
+
+### Added
+
+- Added type alias, constant and variable codelens
+
 ## [1.2.0] - 2025-08-06
 
 ### Added
