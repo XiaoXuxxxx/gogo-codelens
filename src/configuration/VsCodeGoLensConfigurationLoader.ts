@@ -88,6 +88,36 @@ export class VsCodeGoLensConfigurationLoader implements ConfigurationLoader {
           singularTemplate: extensionConfig.get<string>('codelens.struct.implementFrom.singularTemplate')!,
         },
       },
+      typeAliasSymbolEntryConfig: {
+        referencesDisplayRule: {
+          shouldShow: extensionConfig.get<boolean>('codelens.typeAlias.references.isEnabled')!,
+          emptyText: extensionConfig.get<string>('codelens.typeAlias.references.emptyText')!,
+          pluralTemplate: extensionConfig.get<string>('codelens.typeAlias.references.pluralTemplate')!,
+          singularTemplate: extensionConfig.get<string>('codelens.typeAlias.references.singularTemplate')!,
+        },
+        implementFromDisplayRule: {
+          shouldShow: extensionConfig.get<boolean>('codelens.typeAlias.implementFrom.isEnabled')!,
+          emptyText: extensionConfig.get<string>('codelens.typeAlias.implementFrom.emptyText')!,
+          pluralTemplate: extensionConfig.get<string>('codelens.typeAlias.implementFrom.pluralTemplate')!,
+          singularTemplate: extensionConfig.get<string>('codelens.typeAlias.implementFrom.singularTemplate')!,
+        },
+      },
+      constantSymbolEntryConfig: {
+        referencesDisplayRule: {
+          shouldShow: extensionConfig.get<boolean>('codelens.constant.references.isEnabled')!,
+          emptyText: extensionConfig.get<string>('codelens.constant.references.emptyText')!,
+          pluralTemplate: extensionConfig.get<string>('codelens.constant.references.pluralTemplate')!,
+          singularTemplate: extensionConfig.get<string>('codelens.constant.references.singularTemplate')!,
+        },
+      },
+      variableSymbolEntryConfig: {
+        referencesDisplayRule: {
+          shouldShow: extensionConfig.get<boolean>('codelens.variable.references.isEnabled')!,
+          emptyText: extensionConfig.get<string>('codelens.variable.references.emptyText')!,
+          pluralTemplate: extensionConfig.get<string>('codelens.variable.references.pluralTemplate')!,
+          singularTemplate: extensionConfig.get<string>('codelens.variable.references.singularTemplate')!,
+        },
+      },
     };
 
     this.configuration = configuration;

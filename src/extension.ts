@@ -9,10 +9,13 @@ import { CacheStrategyConfigKey } from '@/src/configuration/Configuration';
 import { VsCodeGoLensConfigurationLoader } from '@/src/configuration/VsCodeGoLensConfigurationLoader';
 import { TemplateRenderer } from '@/src/renderer/TemplateRenderer';
 import { SymbolHandlerRegistry } from '@/src/symbol/SymbolHandlerRegistry';
+import { ConstantSymbolHandler } from '@/src/symbol/handler/ConstantSymbolHandler';
 import { FunctionSymbolHandler } from '@/src/symbol/handler/FunctionSymbolHandler';
 import { InterfaceSymbolHandler } from '@/src/symbol/handler/InterfaceSymbolHandler';
 import { MethodSymbolHandler } from '@/src/symbol/handler/MethodSymbolHandler';
 import { StructSymbolHandler } from '@/src/symbol/handler/StructSymbolHandler';
+import { TypeAliasSymbolHandler } from '@/src/symbol/handler/TypeAliasSymbolHandler';
+import { VariableSymbolHandler } from '@/src/symbol/handler/VariableSymbolHandler';
 import { VsCodeWrapper } from '@/src/vscode/VsCodeWrapper';
 
 function createCodeLensProvider(
@@ -88,6 +91,37 @@ function createCodeLensProvider(
     config.structSymbolEntryConfig.implementFromDisplayRule.shouldShow && config.shouldShowImplementation,
   );
 
+  // type alias
+  const typeAliasReferenceCodeLensMaker = new CodeLensMaker(
+    new TemplateRenderer(config.typeAliasSymbolEntryConfig.referencesDisplayRule.singularTemplate),
+    new TemplateRenderer(config.typeAliasSymbolEntryConfig.referencesDisplayRule.pluralTemplate),
+    config.typeAliasSymbolEntryConfig.referencesDisplayRule.emptyText,
+    config.typeAliasSymbolEntryConfig.referencesDisplayRule.shouldShow && config.shouldShowReference,
+  );
+
+  const typeAliasImplementFromCodeLensMaker = new CodeLensMaker(
+    new TemplateRenderer(config.typeAliasSymbolEntryConfig.implementFromDisplayRule.singularTemplate),
+    new TemplateRenderer(config.typeAliasSymbolEntryConfig.implementFromDisplayRule.pluralTemplate),
+    config.typeAliasSymbolEntryConfig.implementFromDisplayRule.emptyText,
+    config.typeAliasSymbolEntryConfig.implementFromDisplayRule.shouldShow && config.shouldShowImplementation,
+  );
+
+  // constant
+  const constantReferenceCodeLensMaker = new CodeLensMaker(
+    new TemplateRenderer(config.constantSymbolEntryConfig.referencesDisplayRule.singularTemplate),
+    new TemplateRenderer(config.constantSymbolEntryConfig.referencesDisplayRule.pluralTemplate),
+    config.constantSymbolEntryConfig.referencesDisplayRule.emptyText,
+    config.constantSymbolEntryConfig.referencesDisplayRule.shouldShow && config.shouldShowReference,
+  );
+
+  // var
+  const variableReferenceCodeLensMaker = new CodeLensMaker(
+    new TemplateRenderer(config.variableSymbolEntryConfig.referencesDisplayRule.singularTemplate),
+    new TemplateRenderer(config.variableSymbolEntryConfig.referencesDisplayRule.pluralTemplate),
+    config.variableSymbolEntryConfig.referencesDisplayRule.emptyText,
+    config.variableSymbolEntryConfig.referencesDisplayRule.shouldShow && config.shouldShowReference,
+  );
+
   const symbolHandlerRegistry = new SymbolHandlerRegistry([
     new FunctionSymbolHandler(vsCodeWrapper, functionReferenceCodeLensMaker),
     new InterfaceSymbolHandler(
@@ -99,6 +133,9 @@ function createCodeLensProvider(
     ),
     new MethodSymbolHandler(vsCodeWrapper, methodImplementFromCodeLensMaker, methodReferenceCodeLensMaker),
     new StructSymbolHandler(vsCodeWrapper, structImplementFromCodeLensMaker, structReferenceCodeLensMaker),
+    new TypeAliasSymbolHandler(vsCodeWrapper, typeAliasImplementFromCodeLensMaker, typeAliasReferenceCodeLensMaker),
+    new ConstantSymbolHandler(vsCodeWrapper, constantReferenceCodeLensMaker),
+    new VariableSymbolHandler(vsCodeWrapper, variableReferenceCodeLensMaker),
   ]);
 
   const codeLensResultCacheByConfig: Record<CacheStrategyConfigKey, CodeLensResultCache> = {

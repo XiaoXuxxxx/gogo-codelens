@@ -60,6 +60,7 @@
           "default": true,
           "description": "Enable CodeLens annotations for all supported symbols to show their implementations."
         },
+
         "gogoCodeLens.codelens.function.references.isEnabled": {
           "type": "boolean",
           "default": true,
@@ -80,6 +81,7 @@
           "default": "",
           "description": "Text displayed above a function when no references are found. Leave empty to disable the annotation."
         },
+
         "gogoCodeLens.codelens.interface.references.isEnabled": {
           "type": "boolean",
           "default": true,
@@ -120,6 +122,7 @@
           "default": "",
           "description": "Text displayed above an interface when no implementations are found. Leave empty to disable the annotation."
         },
+
         "gogoCodeLens.codelens.childMethodInterface.references.isEnabled": {
           "type": "boolean",
           "default": true,
@@ -160,6 +163,7 @@
           "default": "no implementation",
           "description": "Text displayed above an interface method when no implementations are found. Leave empty to disable the annotation."
         },
+
         "gogoCodeLens.codelens.method.references.isEnabled": {
           "type": "boolean",
           "default": true,
@@ -200,6 +204,7 @@
           "default": "",
           "description": "Text displayed above a method that does not implement any interface methods. Leave empty to disable the annotation."
         },
+
         "gogoCodeLens.codelens.struct.references.isEnabled": {
           "type": "boolean",
           "default": true,
@@ -239,6 +244,89 @@
           "type": "string",
           "default": "",
           "description": "Text displayed above a struct that does not implement any interfaces. Leave empty to disable the annotation."
+        },
+
+        "gogoCodeLens.codelens.typeAlias.references.isEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable CodeLens annotations above type alias to show how many times they are referenced."
+        },
+        "gogoCodeLens.codelens.typeAlias.references.singularTemplate": {
+          "type": "string",
+          "default": "{{ count }} reference",
+          "description": "Template text displayed above a type alias with exactly one reference."
+        },
+        "gogoCodeLens.codelens.typeAlias.references.pluralTemplate": {
+          "type": "string",
+          "default": "{{ count }} references",
+          "description": "Template text displayed above a type alias with multiple references."
+        },
+        "gogoCodeLens.codelens.typeAlias.references.emptyText": {
+          "type": "string",
+          "default": "",
+          "description": "Text displayed above a type alias when no references are found. Leave empty to disable the annotation."
+        },
+        "gogoCodeLens.codelens.typeAlias.implementFrom.isEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable CodeLens annotations above type aliases to show how many interfaces they implement."
+        },
+        "gogoCodeLens.codelens.typeAlias.implementFrom.singularTemplate": {
+          "type": "string",
+          "default": "↑↑ from interface",
+          "description": "Template text displayed above a type alias that implements exactly one interface."
+        },
+        "gogoCodeLens.codelens.typeAlias.implementFrom.pluralTemplate": {
+          "type": "string",
+          "default": "↑↑ from interface ({{ count }})",
+          "description": "Template text displayed above a type alias that implements multiple interfaces."
+        },
+        "gogoCodeLens.codelens.typeAlias.implementFrom.emptyText": {
+          "type": "string",
+          "default": "",
+          "description": "Text displayed above a type alias that does not implement any interfaces. Leave empty to disable the annotation."
+        },
+
+        "gogoCodeLens.codelens.constant.references.isEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable CodeLens annotations above constants to show how many times they are referenced."
+        },
+        "gogoCodeLens.codelens.constant.references.singularTemplate": {
+          "type": "string",
+          "default": "{{ count }} reference",
+          "description": "Template text displayed above a constant with exactly one reference."
+        },
+        "gogoCodeLens.codelens.constant.references.pluralTemplate": {
+          "type": "string",
+          "default": "{{ count }} references",
+          "description": "Template text displayed above a constant with multiple references."
+        },
+        "gogoCodeLens.codelens.constant.references.emptyText": {
+          "type": "string",
+          "default": "",
+          "description": "Text displayed above a constant when no references are found. Leave empty to disable the annotation."
+        },
+
+        "gogoCodeLens.codelens.variable.references.isEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable CodeLens annotations above variables to show how many times they are referenced."
+        },
+        "gogoCodeLens.codelens.variable.references.singularTemplate": {
+          "type": "string",
+          "default": "{{ count }} reference",
+          "description": "Template text displayed above a variable with exactly one reference."
+        },
+        "gogoCodeLens.codelens.variable.references.pluralTemplate": {
+          "type": "string",
+          "default": "{{ count }} references",
+          "description": "Template text displayed above a variable with multiple references."
+        },
+        "gogoCodeLens.codelens.variable.references.emptyText": {
+          "type": "string",
+          "default": "",
+          "description": "Text displayed above a variable when no references are found. Leave empty to disable the annotation."
         }
       }
     },

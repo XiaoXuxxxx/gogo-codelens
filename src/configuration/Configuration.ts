@@ -32,6 +32,18 @@ export interface Configuration {
     referencesDisplayRule: CodeLensDisplayRules;
     implementFromDisplayRule: CodeLensDisplayRules;
   };
+
+  typeAliasSymbolEntryConfig: {
+    referencesDisplayRule: CodeLensDisplayRules;
+    implementFromDisplayRule: CodeLensDisplayRules;
+  };
+
+  constantSymbolEntryConfig: {
+    referencesDisplayRule: CodeLensDisplayRules;
+  };
+  variableSymbolEntryConfig: {
+    referencesDisplayRule: CodeLensDisplayRules;
+  };
 }
 
 export interface ConfigurationLoader {
