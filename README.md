@@ -225,3 +225,66 @@ You can configure the extension in your VS Code `settings.json` or through the s
 | `gogoCodeLens.codelens.struct.implementFrom.singularTemplat` | Template text displayed above a struct that implements exactly one interface. | `↑↑ from interface` |
 | `gogoCodeLens.codelens.struct.implementFrom.pluralTemplate` | Template text displayed above a struct that implements multiple interfaces. | `↑↑ from interface ({{ count }})` |
 | `gogoCodeLens.codelens.struct.implementFrom.emptyText` | Text displayed above a struct that does not implement any interfaces. Leave empty to disable the annotation. | *(empty — hides CodeLens)* |
+
+
+
+### Type alias Configuration - `references`
+
+| Enable Only `references` | Enable Both `implementFrom` and `references` |
+|---------|-------------|
+|![type_alias_ref](./docs/images/type_alias_ref.png)|![type_alias_all](./docs/images/type_alias_all.png)|
+
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| `gogoCodeLens.codelens.typeAlias.references.isEnabled` | Enable CodeLens annotations above type aliases to show how many times they are referenced. | `true` |
+| `gogoCodeLens.codelens.typeAlias.references.singularTemplate` | Template text displayed above a type alias with exactly one reference. | `{{ count }} reference` |
+| `gogoCodeLens.codelens.typeAlias.references.pluralTemplate` | Template text displayed above a type alias with multiple references. | `{{ count }} references` |
+| `gogoCodeLens.codelens.typeAlias.references.emptyText` | Text displayed above a type alias when no references are found. Leave empty to disable the annotation. | *(empty — hides CodeLens)* |
+
+### Type alias Configuration - `implementFrom`
+
+| Enable Only `implementFrom` | Enable Both `implementFrom` and `references` |
+|---------|-------------|
+|![type_alias_impl](./docs/images/type_alias_impl.png)|![type_alias_all](./docs/images/type_alias_all.png)|
+
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| `gogoCodeLens.codelens.typeAlias.implementFrom.isEnabled` | Enable CodeLens annotations above type aliases to show how many interfaces they implement. | `true` |
+| `gogoCodeLens.codelens.typeAlias.implementFrom.singularTemplat` | Template text displayed above a type alias that implements exactly one interface. | `↑↑ from interface` |
+| `gogoCodeLens.codelens.typeAlias.implementFrom.pluralTemplate` | Template text displayed above a type alias that implements multiple interfaces. | `↑↑ from interface ({{ count }})` |
+| `gogoCodeLens.codelens.typeAlias.implementFrom.emptyText` | Text displayed above a type alias that does not implement any interfaces. Leave empty to disable the annotation. | *(empty — hides CodeLens)* |
+
+
+
+
+### Constant Configuration - `references`
+
+| Enable Only `references` |
+|---------|
+|![constant_ref](./docs/images/constant_ref.png)|
+
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| `gogoCodeLens.codelens.constant.references.isEnabled` | Enable CodeLens annotations above constants to show how many times they are referenced. | `true` |
+| `gogoCodeLens.codelens.constant.references.singularTemplate` | Template text displayed above a constant with exactly one reference. | `{{ count }} reference` |
+| `gogoCodeLens.codelens.constant.references.pluralTemplate` | Template text displayed above a constant with multiple references. | `{{ count }} references` |
+| `gogoCodeLens.codelens.constant.references.emptyText` | Text displayed above a constant when no references are found. Leave empty to disable the annotation. | *(empty — hides CodeLens)* |
+
+
+### Variable Configuration - `references`
+
+| Enable Only `references` |
+|---------|
+|![variable_ref](./docs/images/variable_ref.png)|
+
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| `gogoCodeLens.codelens.variable.references.isEnabled` | Enable CodeLens annotations above variables to show how many times they are referenced. | `true` |
+| `gogoCodeLens.codelens.variable.references.singularTemplate` | Template text displayed above a variable with exactly one reference. | `{{ count }} reference` |
+| `gogoCodeLens.codelens.variable.references.pluralTemplate` | Template text displayed above a variable with multiple references. | `{{ count }} references` |
+| `gogoCodeLens.codelens.variable.references.emptyText` | Text displayed above a variable when no references are found. Leave empty to disable the annotation. | *(empty — hides CodeLens)* |
+
