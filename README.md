@@ -291,3 +291,6 @@ You can configure the extension in your VS Code `settings.json` or through the s
 | `gogoCodeLens.codelens.variable.references.pluralTemplate` | Template text displayed above a variable with multiple references. | `{{ count }} references` |
 | `gogoCodeLens.codelens.variable.references.emptyText` | Text displayed above a variable when no references are found. Leave empty to disable the annotation. | *(empty — hides CodeLens)* |
 
+## Acknowledgement
+
+https://github.com/tkgalk/go-interface-annotations I took the initial concept for inspiration.
