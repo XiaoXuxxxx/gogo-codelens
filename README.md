@@ -293,4 +293,4 @@ You can configure the extension in your VS Code `settings.json` or through the s
 
 ## Acknowledgement
 
-https://github.com/tkgalk/go-interface-annotations I took the initial concept for inspiration.
+I took the initial concept from this repo https://github.com/tkgalk/go-interface-annotations for inspiration.
