@@ -163,6 +163,20 @@ export async function activate(context: vscode.ExtensionContext) {
     codeLensProvider,
   );
 
+  const restartCommand = vscode.commands.registerCommand('gogoCodeLens.restart', () => {
+    configLoader.updateConfiguration();
+    codeLensProviderDisposable.dispose();
+
+    const newCodeLensProvider = createCodeLensProvider(configLoader, vsCodeWrapper);
+
+    codeLensProviderDisposable = vscode.languages.registerCodeLensProvider(
+      { scheme: 'file', language: 'go' },
+      newCodeLensProvider,
+    );
+
+    context.subscriptions.push(codeLensProviderDisposable);
+  });
+
   const configChangeListener = vscode.workspace.onDidChangeConfiguration((e) => {
     if (!e.affectsConfiguration('gogoCodeLens')) {
       return;
@@ -179,10 +193,9 @@ export async function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(codeLensProviderDisposable);
-    vscode.commands.executeCommand('vscode.executeCodeLensProvider');
   });
 
-  context.subscriptions.push(codeLensProviderDisposable, configChangeListener);
+  context.subscriptions.push(codeLensProviderDisposable, configChangeListener, restartCommand);
 }
 
 export function deactivate() {}

@@ -38,6 +38,12 @@
     "lint": "eslint src"
   },
   "contributes": {
+    "commands": [
+      {
+        "command": "gogoCodeLens.restart",
+        "title": "GoGo CodeLens: Restart extension"
+      }
+    ],
     "configuration": {
       "title": "GoGo CodeLens",
       "properties": {
