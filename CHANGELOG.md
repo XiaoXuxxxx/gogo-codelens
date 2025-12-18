@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.4.0] - 2025-12-18
+
+- (Docs) Add acknowledgement section
+- (Docs) Add troubleshooting section
+- Add command for restart extension
+
 ## [1.3.1] - 2025-08-10
 
 ### Added

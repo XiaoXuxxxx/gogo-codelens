@@ -7,13 +7,14 @@ A VS Code extension that adds CodeLens annotations to your Go code. showing refe
 
 - Added [type alias](#type-alias-configuration---references), [constant](#constant-configuration---references) and [variable](#variable-configuration---references) codelens
 - Added an [option](#caching-strategy) to choose the caching strategy.
+- Added [restart extension command](#commands)
 
 See full changelog here https://github.com/XiaoXuxxxx/gogo-codelens/blob/main/CHANGELOG.md
 
-##  Features
+## Features
 
 - Show reference count or implement count above function, interface, interface method, method, struct, type alias, constant, variable in Go code
-- Fully customizable — You can [enable/disable](#configuration) each annotation type and change how the codelens should be displayed
+- Fully customizable - You can [enable/disable](#configuration) each annotation type and change how the codelens should be displayed
 
 
 |                                                                 |                                                      |
@@ -29,7 +30,6 @@ See full changelog here https://github.com/XiaoXuxxxx/gogo-codelens/blob/main/CH
 
 
 > Don't worry, all annotations are fully [customizable](#configuration) and can be turned off if you prefer a cleaner view.
-
 
 ## Installation
 
@@ -110,7 +110,7 @@ You can configure the extension in your VS Code `settings.json` or through the s
 | `gogoCodeLens.codelens.function.references.isEnabled` | Enable CodeLens annotations above functions to show how many times they are referenced. | `true` | 
 | `gogoCodeLens.codelens.function.references.singularTemplate` | Template text displayed above a function with exactly one reference. | `{{ count }} reference` |
 | `gogoCodeLens.codelens.function.references.pluralTemplate` | Template text displayed above a function with multiple references. | `{{ count }} references` |
-| `gogoCodeLens.codelens.function.references.emptyText` | Text displayed above a function when no references are found. Leave empty to disable the annotation. | *(empty — hides CodeLens)* |
+| `gogoCodeLens.codelens.function.references.emptyText` | Text displayed above a function when no references are found. Leave empty to disable the annotation. | *(empty - hides CodeLens)* |
 
 
 ### Interface Configuration - `references`
@@ -126,7 +126,7 @@ You can configure the extension in your VS Code `settings.json` or through the s
 | `gogoCodeLens.codelens.interface.references.isEnabled` | Enable CodeLens annotations above interfaces to show how many times they are referenced. | `true` |
 | `gogoCodeLens.codelens.interface.references.singularTemplate` | Template text displayed above an interface with exactly one reference. | `{{ count }} reference` |
 | `gogoCodeLens.codelens.interface.references.pluralTemplate` | Template text displayed above an interface with multiple references. | `{{ count }} references` |
-| `gogoCodeLens.codelens.interface.references.emptyText` | Text displayed above an interface when no references are found. Leave empty to disable the annotation. | *(empty — hides CodeLens)* |
+| `gogoCodeLens.codelens.interface.references.emptyText` | Text displayed above an interface when no references are found. Leave empty to disable the annotation. | *(empty - hides CodeLens)* |
 
 ### Interface Configuration - `implementBy`
 
@@ -140,7 +140,7 @@ You can configure the extension in your VS Code `settings.json` or through the s
 | `gogoCodeLens.codelens.interface.implementBy.isEnabled` | Enable CodeLens annotations above interfaces to show how many types implement them. | `true` |
 | `gogoCodeLens.codelens.interface.implementBy.singularTemplate` | Template text displayed above an interface with exactly one implementation. | `"↓↓ implemented below` |
 | `gogoCodeLens.codelens.interface.implementBy.pluralTemplate` | Template text displayed above an interface with multiple implementations. | `↓↓ implemented by {{ count }}` |
-| `gogoCodeLens.codelens.interface.implementBy.emptyText` | Text displayed above an interface when no implementations are found. Leave empty to disable the annotation. | *(empty — hides CodeLens)* |
+| `gogoCodeLens.codelens.interface.implementBy.emptyText` | Text displayed above an interface when no implementations are found. Leave empty to disable the annotation. | *(empty - hides CodeLens)* |
 
 ### Child method interface Configuration - `references`
 
@@ -182,7 +182,7 @@ You can configure the extension in your VS Code `settings.json` or through the s
 | `gogoCodeLens.codelens.method.references.isEnabled` | Enable CodeLens annotations above methods to show how many times they are referenced. | `true` |
 | `gogoCodeLens.codelens.method.references.singularTemplate` | Template text displayed above a method with exactly one reference. | `{{ count }} reference` |
 | `gogoCodeLens.codelens.method.references.pluralTemplate` |  Template text displayed above a method with multiple references. | `"{{ count }} references` |
-| `"gogoCodeLens.codelens.method.references.emptyText` | Text displayed above a method when no references are found. Leave empty to disable the annotation. | *(empty — hides CodeLens)* |
+| `"gogoCodeLens.codelens.method.references.emptyText` | Text displayed above a method when no references are found. Leave empty to disable the annotation. | *(empty - hides CodeLens)* |
 
 ### Method Configuration - `implementFrom`
 
@@ -196,7 +196,7 @@ You can configure the extension in your VS Code `settings.json` or through the s
 | `gogoCodeLens.codelens.method.implementFrom.isEnabled` | Enable CodeLens annotations above methods to show how many interface methods they implement. | `true` |
 | `gogoCodeLens.codelens.method.implementFrom.singularTemplate` | Template text displayed above a method that implements exactly one interface method. | `↑↑ from interface` |
 | `gogoCodeLens.codelens.method.implementFrom.pluralTemplate` | Template text displayed above a method that implements multiple interface methods. | `↑↑ from interface ({{ count }})` |
-| `gogoCodeLens.codelens.method.implementFrom.emptyText` | Text displayed above a method that does not implement any interface methods. Leave empty to disable the annotation. | *(empty — hides CodeLens)* |
+| `gogoCodeLens.codelens.method.implementFrom.emptyText` | Text displayed above a method that does not implement any interface methods. Leave empty to disable the annotation. | *(empty - hides CodeLens)* |
 
 
 
@@ -213,7 +213,7 @@ You can configure the extension in your VS Code `settings.json` or through the s
 | `gogoCodeLens.codelens.struct.references.isEnabled` | Enable CodeLens annotations above structs to show how many times they are referenced. | `true` |
 | `gogoCodeLens.codelens.struct.references.singularTemplate` | Template text displayed above a struct with exactly one reference. | `{{ count }} reference` |
 | `gogoCodeLens.codelens.struct.references.pluralTemplate` | Template text displayed above a struct with multiple references. | `{{ count }} references` |
-| `gogoCodeLens.codelens.struct.references.emptyText` | Text displayed above a struct when no references are found. Leave empty to disable the annotation. | *(empty — hides CodeLens)* |
+| `gogoCodeLens.codelens.struct.references.emptyText` | Text displayed above a struct when no references are found. Leave empty to disable the annotation. | *(empty - hides CodeLens)* |
 
 ### Struct Configuration - `implementFrom`
 
@@ -227,7 +227,7 @@ You can configure the extension in your VS Code `settings.json` or through the s
 | `gogoCodeLens.codelens.struct.implementFrom.isEnabled` | Enable CodeLens annotations above structs to show how many interfaces they implement. | `true` |
 | `gogoCodeLens.codelens.struct.implementFrom.singularTemplat` | Template text displayed above a struct that implements exactly one interface. | `↑↑ from interface` |
 | `gogoCodeLens.codelens.struct.implementFrom.pluralTemplate` | Template text displayed above a struct that implements multiple interfaces. | `↑↑ from interface ({{ count }})` |
-| `gogoCodeLens.codelens.struct.implementFrom.emptyText` | Text displayed above a struct that does not implement any interfaces. Leave empty to disable the annotation. | *(empty — hides CodeLens)* |
+| `gogoCodeLens.codelens.struct.implementFrom.emptyText` | Text displayed above a struct that does not implement any interfaces. Leave empty to disable the annotation. | *(empty - hides CodeLens)* |
 
 
 
@@ -243,7 +243,7 @@ You can configure the extension in your VS Code `settings.json` or through the s
 | `gogoCodeLens.codelens.typeAlias.references.isEnabled` | Enable CodeLens annotations above type aliases to show how many times they are referenced. | `true` |
 | `gogoCodeLens.codelens.typeAlias.references.singularTemplate` | Template text displayed above a type alias with exactly one reference. | `{{ count }} reference` |
 | `gogoCodeLens.codelens.typeAlias.references.pluralTemplate` | Template text displayed above a type alias with multiple references. | `{{ count }} references` |
-| `gogoCodeLens.codelens.typeAlias.references.emptyText` | Text displayed above a type alias when no references are found. Leave empty to disable the annotation. | *(empty — hides CodeLens)* |
+| `gogoCodeLens.codelens.typeAlias.references.emptyText` | Text displayed above a type alias when no references are found. Leave empty to disable the annotation. | *(empty - hides CodeLens)* |
 
 ### Type alias Configuration - `implementFrom`
 
@@ -257,7 +257,7 @@ You can configure the extension in your VS Code `settings.json` or through the s
 | `gogoCodeLens.codelens.typeAlias.implementFrom.isEnabled` | Enable CodeLens annotations above type aliases to show how many interfaces they implement. | `true` |
 | `gogoCodeLens.codelens.typeAlias.implementFrom.singularTemplat` | Template text displayed above a type alias that implements exactly one interface. | `↑↑ from interface` |
 | `gogoCodeLens.codelens.typeAlias.implementFrom.pluralTemplate` | Template text displayed above a type alias that implements multiple interfaces. | `↑↑ from interface ({{ count }})` |
-| `gogoCodeLens.codelens.typeAlias.implementFrom.emptyText` | Text displayed above a type alias that does not implement any interfaces. Leave empty to disable the annotation. | *(empty — hides CodeLens)* |
+| `gogoCodeLens.codelens.typeAlias.implementFrom.emptyText` | Text displayed above a type alias that does not implement any interfaces. Leave empty to disable the annotation. | *(empty - hides CodeLens)* |
 
 
 
@@ -274,7 +274,7 @@ You can configure the extension in your VS Code `settings.json` or through the s
 | `gogoCodeLens.codelens.constant.references.isEnabled` | Enable CodeLens annotations above constants to show how many times they are referenced. | `true` |
 | `gogoCodeLens.codelens.constant.references.singularTemplate` | Template text displayed above a constant with exactly one reference. | `{{ count }} reference` |
 | `gogoCodeLens.codelens.constant.references.pluralTemplate` | Template text displayed above a constant with multiple references. | `{{ count }} references` |
-| `gogoCodeLens.codelens.constant.references.emptyText` | Text displayed above a constant when no references are found. Leave empty to disable the annotation. | *(empty — hides CodeLens)* |
+| `gogoCodeLens.codelens.constant.references.emptyText` | Text displayed above a constant when no references are found. Leave empty to disable the annotation. | *(empty - hides CodeLens)* |
 
 
 ### Variable Configuration - `references`
@@ -289,8 +289,30 @@ You can configure the extension in your VS Code `settings.json` or through the s
 | `gogoCodeLens.codelens.variable.references.isEnabled` | Enable CodeLens annotations above variables to show how many times they are referenced. | `true` |
 | `gogoCodeLens.codelens.variable.references.singularTemplate` | Template text displayed above a variable with exactly one reference. | `{{ count }} reference` |
 | `gogoCodeLens.codelens.variable.references.pluralTemplate` | Template text displayed above a variable with multiple references. | `{{ count }} references` |
-| `gogoCodeLens.codelens.variable.references.emptyText` | Text displayed above a variable when no references are found. Leave empty to disable the annotation. | *(empty — hides CodeLens)* |
+| `gogoCodeLens.codelens.variable.references.emptyText` | Text displayed above a variable when no references are found. Leave empty to disable the annotation. | *(empty - hides CodeLens)* |
+
+## Commands
+
+You can use command by pressing `ctrl + shift + P` (for Windows) or `cmd + shift + P` (for MacOS) and type the title of command and select/enter it to execute
+
+| title                              | command                | Description       |
+|------------------------------------|------------------------|-------------------|
+| `GoGo CodeLens: Restart extension` | `gogoCodeLens.restart` | Restart extension |
+
+## Troubleshoot
+
+### Extension is not working or something went wrong
+
+- try restart GoLang language server by using command `Go: Restart Language Server`
+- try restart this extension by using command [`GoGo CodeLens: Restart extension`](#commands)
+- try change [Caching strategy](#caching-strategy) by using `NO_CACHE` option
+- close and open vscode?
+
+If you try them all and still not working, feel free to submit the issue [here](https://github.com/XiaoXuxxxx/gogo-codelens/issues)
 
 ## Acknowledgement
 
-I took the initial concept from this repo https://github.com/tkgalk/go-interface-annotations for inspiration.
+- Jetbrains IDE for inspiration about showing implemented or implementing in method/class/interface (the arrow things before the line of code)
+- [built-in typescript vscode codelens](https://code.visualstudio.com/docs/typescript/typescript-editing#_implementations-codelens) for inspiration about showing references and implementation in codelens
+- extension [tkgalk/go-interface-annotations](https://github.com/tkgalk/go-interface-annotations) for code inspiration
+
