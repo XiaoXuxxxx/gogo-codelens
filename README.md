@@ -34,9 +34,11 @@ See full changelog here https://github.com/XiaoXuxxxx/gogo-codelens/blob/main/CH
 
 ## Installation
 
-### Option 1: Install from VS Code Marketplace
+### Option 1: Install from marketplace
 
-You can download it from https://marketplace.visualstudio.com/items?itemName=xiaoxuxxxx.gogo-codelens
+- Visual Studio Marketplace https://marketplace.visualstudio.com/items?itemName=xiaoxuxxxx.gogo-codelens
+- Open VSX Registry: https://open-vsx.org/extension/XiaoXuxxxx/gogo-codelens
+- GitHub release: https://github.com/XiaoXuxxxx/gogo-codelens/releases
 
 ### Option 2: Build and Install Locally
 

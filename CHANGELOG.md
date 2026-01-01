@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.4.2] - 2026-01-01
+
+- (Docs) Add Open VSX Marketplace url in README file
+
 ## [1.4.1] - 2026-01-01
 
 - Add Github action step to publish at https://open-vsx.org/
