@@ -8,6 +8,7 @@ A VS Code extension that adds CodeLens annotations to your Go code. showing refe
 - Added [type alias](#type-alias-configuration---references), [constant](#constant-configuration---references) and [variable](#variable-configuration---references) codelens
 - Added an [option](#caching-strategy) to choose the caching strategy.
 - Added [restart extension command](#commands)
+- Published extension to [Open VSX Registry](https://open-vsx.org/)
 
 See full changelog here https://github.com/XiaoXuxxxx/gogo-codelens/blob/main/CHANGELOG.md
 
