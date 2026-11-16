@@ -2,10 +2,17 @@ on:
   push:
     tags:
       - "*"
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Existing GitHub release tag to publish to Marketplace (e.g. v1.4.3)'
+        required: true
+        type: string
 
 name: Deploy and Release Extension
 jobs:
   deploy:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -35,3 +42,23 @@ jobs:
         run: npx --yes ovsx@1.4.0 publish --trusted-publishing
       - name: Publish to Visual Studio Marketplace
         run: npx --yes @vscode/vsce@4.1.1 publish --oidc
+
+  retry-marketplace:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Download existing release VSIX
+        run: gh release download --repo "$GITHUB_REPOSITORY" --pattern '*.vsix' -- "$RELEASE_TAG"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+
+      - name: Publish to Visual Studio Marketplace
+        run: npx --yes @vscode/vsce@4.1.1 publish --oidc --packagePath ./*.vsix
