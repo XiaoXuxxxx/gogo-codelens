@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.4.4] - 2026-11-17
+
+### Changed
+
+- Use OIDC trusted publishing for Visual Studio Marketplace and Open VSX releases instead of personal access tokens.
+
 ## [1.4.3] - 2026-11-16
 
 ### Fixed
