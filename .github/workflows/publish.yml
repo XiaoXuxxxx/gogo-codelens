@@ -9,20 +9,21 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - run: npm ci
 
       - name: Package Extension
-        run: npx vsce package
+        run: npx --yes @vscode/vsce@4.1.1 package
 
       - name: Get tag name
         id: get_tag
-        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> "$GITHUB_ENV"
 
       - name: Upload .vsix to GitHub Release
         uses: softprops/action-gh-release@v2
@@ -31,12 +32,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish to Open VSX Registry
-        uses: HaaLeo/publish-vscode-extension@v2
-        id: publishToOpenVSX
-        with:
-          pat: ${{ secrets.OPEN_VSX_TOKEN }}
+        run: npx --yes ovsx@1.4.0 publish --trusted-publishing
       - name: Publish to Visual Studio Marketplace
-        uses: HaaLeo/publish-vscode-extension@v2
-        with:
-          pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
-          registryUrl: https://marketplace.visualstudio.com
+        run: npx --yes @vscode/vsce@4.1.1 publish --oidc
