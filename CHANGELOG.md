@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.4.3] - 2026-11-16
+
+### Fixed
+
+- Fix CodeLens errors when VS Code language providers return `undefined`. ([#5](https://github.com/XiaoXuxxxx/gogo-codelens/pull/5), thanks [@caiflower](https://github.com/caiflower))
+
 ## [1.4.2] - 2026-01-01
 
 - (Docs) Add Open VSX Marketplace url in README file
