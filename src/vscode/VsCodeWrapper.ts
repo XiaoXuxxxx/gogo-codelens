@@ -15,7 +15,7 @@ export class VsCodeWrapper {
       uri,
     );
 
-    return symbols;
+    return symbols ?? [];
   }
 
   public async executeImplementationProvider(
@@ -29,7 +29,7 @@ export class VsCodeWrapper {
       new vscode.Position(line, character),
     );
 
-    return implementationLocations;
+    return implementationLocations ?? [];
   }
 
   public async executeReferenceProvider(
@@ -43,6 +43,6 @@ export class VsCodeWrapper {
       new vscode.Position(line, character),
     );
 
-    return referenceLocations;
+    return referenceLocations ?? [];
   }
 }

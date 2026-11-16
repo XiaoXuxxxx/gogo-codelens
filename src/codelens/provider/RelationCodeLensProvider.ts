@@ -22,15 +22,19 @@ export class RelationCodeLensProvider implements vscode.CodeLensProvider {
 
   public async provideCodeLenses(
     document: vscode.TextDocument,
-    _token: vscode.CancellationToken,
+    token: vscode.CancellationToken,
   ): Promise<vscode.CodeLens[]> {
+    if (token.isCancellationRequested) {
+      return [];
+    }
+
     const cacheCodeLens = this.codeLensResultCache.get(document);
     if (cacheCodeLens !== undefined) {
       return cacheCodeLens;
     }
 
     const symbols = await this.vsCodeWrapper.executeDocumentSymbolProvider(document.uri);
-    if (symbols.length === 0) {
+    if (token.isCancellationRequested || symbols.length === 0) {
       return [];
     }
 
@@ -48,6 +52,10 @@ export class RelationCodeLensProvider implements vscode.CodeLensProvider {
     }
 
     const codeLens = await Promise.all(futureCodeLenses);
+    if (token.isCancellationRequested) {
+      return [];
+    }
+
     const flattedCodeLens = codeLens.flat();
 
     this.codeLensResultCache.set(document, flattedCodeLens);
